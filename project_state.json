@@ -4,6 +4,14 @@
   "last_updated": "2026-03-14",
   "owner": "Orchestrator",
 
+  "product": {
+    "spec": "docs/project_spec.md",
+    "architecture": "docs/arch/README.md",
+    "data_strategy": "offline-first, Room + DataStore, future online",
+    "auth_strategy": "local profile (DataStore), future Firebase Auth",
+    "maps_provider": "TBD by Tech Director"
+  },
+
   "team": {
     "orchestrator": "active",
     "tech_director": "active",
@@ -13,27 +21,155 @@
 
   "sprint": {
     "id": 1,
-    "name": "Sprint 1 - Foundation",
-    "status": "planning",
-    "started": null,
+    "name": "Sprint 1 — Foundation",
+    "status": "in_progress",
+    "goal": "Онбординг + навигация + Places (список, детали, добавление)",
+    "started": "2026-03-14",
     "deadline": null
   },
 
-  "tasks": [],
+  "current_focus": {
+    "agent": "developer",
+    "action": "implement_TASK-002",
+    "context": "Domain layer: Place/UserProfile models + UseCases + repository interfaces"
+  },
+
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Настройка зависимостей (Hilt, Room, DataStore, Navigation, KSP)",
+      "type": "chore",
+      "priority": "Critical",
+      "status": "done",
+      "assigned_to": null,
+      "sprint": "SPRINT-1",
+      "branch": "feature/TASK-001-setup-dependencies",
+      "pr": "#1",
+      "qa_verdict": "PASS",
+      "merged": true,
+      "created_at": "2026-03-14",
+      "updated_at": "2026-03-14"
+    },
+    {
+      "id": "TASK-002",
+      "title": "Доменный слой — модели Place/UserProfile + UseCase + интерфейсы репозиториев",
+      "type": "feature",
+      "priority": "Critical",
+      "status": "in_progress",
+      "assigned_to": "developer",
+      "sprint": "SPRINT-1",
+      "branch": "feature/TASK-002-domain-layer",
+      "pr": null,
+      "qa_verdict": null,
+      "merged": false,
+      "created_at": "2026-03-14",
+      "updated_at": "2026-03-14"
+    },
+    {
+      "id": "TASK-003",
+      "title": "Data-слой — Room, DAO, PlaceMapper, DataStore, RepositoryImpl, Hilt-модули",
+      "type": "feature",
+      "priority": "Critical",
+      "status": "todo",
+      "assigned_to": null,
+      "sprint": "SPRINT-1",
+      "branch": null,
+      "pr": null,
+      "qa_verdict": null,
+      "merged": false,
+      "created_at": "2026-03-14",
+      "updated_at": "2026-03-14"
+    },
+    {
+      "id": "TASK-004",
+      "title": "Онбординг — OnboardingScreen + OnboardingViewModel",
+      "type": "feature",
+      "priority": "Critical",
+      "status": "todo",
+      "assigned_to": null,
+      "sprint": "SPRINT-1",
+      "branch": null,
+      "pr": null,
+      "qa_verdict": null,
+      "merged": false,
+      "created_at": "2026-03-14",
+      "updated_at": "2026-03-14"
+    },
+    {
+      "id": "TASK-005",
+      "title": "Навигация — граф экранов, BottomNavBar, MainScreen, MainViewModel",
+      "type": "feature",
+      "priority": "Critical",
+      "status": "todo",
+      "assigned_to": null,
+      "sprint": "SPRINT-1",
+      "branch": null,
+      "pr": null,
+      "qa_verdict": null,
+      "merged": false,
+      "created_at": "2026-03-14",
+      "updated_at": "2026-03-14"
+    },
+    {
+      "id": "TASK-006",
+      "title": "PlacesListScreen — список мест + PlaceCard + PlacesListViewModel",
+      "type": "feature",
+      "priority": "High",
+      "status": "todo",
+      "assigned_to": null,
+      "sprint": "SPRINT-1",
+      "branch": null,
+      "pr": null,
+      "qa_verdict": null,
+      "merged": false,
+      "created_at": "2026-03-14",
+      "updated_at": "2026-03-14"
+    },
+    {
+      "id": "TASK-007",
+      "title": "PlaceDetailScreen — детали места + PlaceDetailViewModel",
+      "type": "feature",
+      "priority": "High",
+      "status": "todo",
+      "assigned_to": null,
+      "sprint": "SPRINT-1",
+      "branch": null,
+      "pr": null,
+      "qa_verdict": null,
+      "merged": false,
+      "created_at": "2026-03-14",
+      "updated_at": "2026-03-14"
+    },
+    {
+      "id": "TASK-008",
+      "title": "AddEditPlaceScreen — форма добавления/редактирования + AddEditPlaceViewModel",
+      "type": "feature",
+      "priority": "High",
+      "status": "todo",
+      "assigned_to": null,
+      "sprint": "SPRINT-1",
+      "branch": null,
+      "pr": null,
+      "qa_verdict": null,
+      "merged": false,
+      "created_at": "2026-03-14",
+      "updated_at": "2026-03-14"
+    }
+  ],
 
   "bugs": [],
 
   "git": {
     "main_branch": "main",
     "dev_branch": "develop",
-    "active_branches": [],
+    "active_branches": ["feature/TASK-002-domain-layer"],
     "open_prs": []
   },
 
   "stats": {
-    "tasks_total": 0,
-    "tasks_done": 0,
-    "tasks_in_progress": 0,
+    "tasks_total": 8,
+    "tasks_done": 1,
+    "tasks_in_progress": 1,
     "tasks_blocked": 0,
     "bugs_open": 0,
     "bugs_closed": 0

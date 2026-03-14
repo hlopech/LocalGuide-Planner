@@ -1,0 +1,58 @@
+# Android
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.caches
+
+# Android core project
+android\ core/.gradle/
+android\ core/build/
+android\ core/local.properties
+android\ core/.idea/
+android\ core/**/*.iml
+android\ core/captures/
+
+# Kotlin
+*.class
+*.jar
+*.war
+*.ear
+
+# Secrets
+.env
+.env.local
+*.keystore
+google-services.json
+local.properties
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# Build outputs
+build/
+out/
+
+# Node (если вдруг понадобится для tooling)
+node_modules/

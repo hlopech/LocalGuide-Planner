@@ -1,0 +1,57 @@
+{
+  "project": "LocalGuide Planner",
+  "version": "0.1.0",
+  "last_updated": "2026-03-14",
+  "owner": "Orchestrator",
+
+  "team": {
+    "orchestrator": "active",
+    "tech_director": "active",
+    "developer": "active",
+    "qa_tester": "active"
+  },
+
+  "sprint": {
+    "id": 1,
+    "name": "Sprint 1 - Foundation",
+    "status": "planning",
+    "started": null,
+    "deadline": null
+  },
+
+  "tasks": [],
+
+  "bugs": [],
+
+  "git": {
+    "main_branch": "main",
+    "dev_branch": "develop",
+    "active_branches": [],
+    "open_prs": []
+  },
+
+  "stats": {
+    "tasks_total": 0,
+    "tasks_done": 0,
+    "tasks_in_progress": 0,
+    "tasks_blocked": 0,
+    "bugs_open": 0,
+    "bugs_closed": 0
+  },
+
+  "_task_schema": {
+    "id": "TASK-NNN",
+    "title": "...",
+    "type": "feature | bugfix | refactor | chore",
+    "priority": "Critical | High | Medium | Low",
+    "status": "todo | in_progress | review | qa_review | done | blocked",
+    "assigned_to": "developer | qa_tester | tech_director | null",
+    "sprint": "SPRINT-N",
+    "branch": "feature/TASK-NNN-name | null",
+    "pr": "#NNN | null",
+    "qa_verdict": "pending | PASS | FAIL | null",
+    "merged": false,
+    "created_at": "YYYY-MM-DD",
+    "updated_at": "YYYY-MM-DD"
+  }
+}

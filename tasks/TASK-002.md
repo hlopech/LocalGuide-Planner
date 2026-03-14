@@ -167,11 +167,11 @@ data class UserProfile(
 
 ## Статус выполнения
 
-**Статус:** review
+**Статус:** done
 
 **Ветка:** feature/TASK-002-domain-layer
 **PR:** #2 (https://github.com/hlopech/LocalGuide-Planner/pull/2)
-**QA вердикт:** pending
+**QA вердикт:** PASS
 **Мерж:** ожидает
 
 ### История статусов
@@ -179,3 +179,4 @@ data class UserProfile(
 |------|--------|-------|-----------|
 | 2026-03-14 | todo | Tech Director | Задача создана |
 | 2026-03-14 | review | Developer | Реализован domain-слой: модели, репозитории, UseCase, unit-тесты |
+| 2026-03-14 | done | QA Tester | Все критерии выполнены, вердикт PASS |

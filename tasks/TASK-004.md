@@ -139,14 +139,16 @@ class OnboardingViewModel @Inject constructor(
 
 ## Статус выполнения
 
-**Статус:** todo
+**Статус:** fail
 
-**Ветка:** feature/TASK-004-onboarding (заполняет Developer)
-**PR:** — (заполняет Developer)
-**QA вердикт:** pending
-**Мерж:** ожидает
+**Ветка:** feature/TASK-004-onboarding
+**PR:** https://github.com/hlopech/LocalGuide-Planner/pull/5
+**QA вердикт:** FAIL
+**Мерж:** заблокирован
 
 ### История статусов
 | Дата | Статус | Агент | Примечание |
 |------|--------|-------|-----------|
 | 2026-03-14 | todo | Tech Director | Задача создана |
+| 2026-03-14 | review | Developer | Реализация завершена, тесты зелёные (47/47), assembleDebug успешен |
+| 2026-03-14 | fail | QA Tester | BUG-009 (Critical): Нет try/catch в OnboardingViewModel.onGetStartedClicked — isLoading зависает, возможен крэш. Medium: нет теста на 50 символов, нет теста на исключение UseCase, тексты strings.xml не совпадают с TASK-004.md. |

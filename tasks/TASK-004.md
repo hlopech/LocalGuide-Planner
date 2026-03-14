@@ -139,10 +139,10 @@ class OnboardingViewModel @Inject constructor(
 
 ## Статус выполнения
 
-**Статус:** todo
+**Статус:** review
 
-**Ветка:** feature/TASK-004-onboarding (заполняет Developer)
-**PR:** — (заполняет Developer)
+**Ветка:** feature/TASK-004-onboarding
+**PR:** — (ожидает создания через gh pr create)
 **QA вердикт:** pending
 **Мерж:** ожидает
 
@@ -150,3 +150,4 @@ class OnboardingViewModel @Inject constructor(
 | Дата | Статус | Агент | Примечание |
 |------|--------|-------|-----------|
 | 2026-03-14 | todo | Tech Director | Задача создана |
+| 2026-03-14 | review | Developer | Реализация завершена, тесты зелёные (47/47), assembleDebug успешен |

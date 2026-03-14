@@ -153,12 +153,12 @@ dependencies {
 
 ## Статус выполнения
 
-**Статус:** review
+**Статус:** qa_passed
 
 **Ветка:** feature/TASK-001-setup-dependencies
-**PR:** — (создаётся)
-**QA вердикт:** pending
-**Мерж:** ожидает
+**PR:** https://github.com/hlopech/LocalGuide-Planner/pull/1
+**QA вердикт:** PASS
+**Мерж:** ожидает Orchestrator
 
 ### История статусов
 | Дата | Статус | Агент | Примечание |
@@ -166,3 +166,4 @@ dependencies {
 | 2026-03-14 | todo | Tech Director | Задача создана |
 | 2026-03-14 | in_progress | Developer | Начата реализация |
 | 2026-03-14 | review | Developer | assembleDebug BUILD SUCCESSFUL, tests PASSED. Hilt обновлён до 2.59.1 для совместимости с AGP 9.0.1. Добавлен android.disallowKotlinSourceSets=false для совместимости KSP + AGP 9. |
+| 2026-03-14 | qa_passed | QA Tester | Все критерии выполнены. assembleDebug SUCCESSFUL, test SUCCESSFUL (1/0 failed), lint SUCCESSFUL. KSP генерирует Hilt-классы. Технические отклонения обоснованы. |

@@ -2,14 +2,15 @@ package com.example.localguide_planner.ui.navigation
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.localguide_planner.R
 import com.example.localguide_planner.ui.main.MainScreen
-import com.example.localguide_planner.ui.onboarding.OnboardingScreen
 import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
 
 @Composable
@@ -21,13 +22,8 @@ fun AppNavGraph(startDestination: String) {
         startDestination = startDestination,
     ) {
         composable(route = Screen.Onboarding.route) {
-            OnboardingScreen(
-                onOnboardingCompleted = {
-                    navController.navigate(Screen.Main.route) {
-                        popUpTo(Screen.Onboarding.route) { inclusive = true }
-                    }
-                },
-            )
+            // Placeholder — будет заменён на OnboardingScreen после мержа TASK-004
+            Text(text = stringResource(R.string.placeholder_onboarding))
         }
 
         composable(route = Screen.Main.route) {
@@ -40,11 +36,11 @@ fun AppNavGraph(startDestination: String) {
                 navArgument(Screen.PlaceDetail.ARG_PLACE_ID) { type = NavType.StringType },
             ),
         ) {
-            Text(text = "Place detail placeholder")
+            Text(text = stringResource(R.string.placeholder_place_detail))
         }
 
         composable(route = Screen.AddPlace.route) {
-            Text(text = "Add place placeholder")
+            Text(text = stringResource(R.string.placeholder_add_place))
         }
 
         composable(
@@ -53,7 +49,7 @@ fun AppNavGraph(startDestination: String) {
                 navArgument(Screen.EditPlace.ARG_PLACE_ID) { type = NavType.StringType },
             ),
         ) {
-            Text(text = "Edit place placeholder")
+            Text(text = stringResource(R.string.placeholder_edit_place))
         }
     }
 }

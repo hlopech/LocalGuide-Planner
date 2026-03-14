@@ -51,8 +51,8 @@
 - [x] `MainActivity` показывает `CircularProgressIndicator` пока startDestination == null
 - [x] Строки `nav_places` и `app_bar_title_places` добавлены в strings.xml
 - [x] Unit-тесты для `MainViewModel` написаны и проходят
-- [x] KTLint без ошибок
-- [x] Нет hardcoded строк/цветов
+- [ ] KTLint без ошибок (не проверено — проект не компилируется)
+- [ ] Нет hardcoded строк/цветов (нарушено: 4 hardcoded строки в AppNavGraph.kt и MainScreen.kt)
 
 ## Тест-сценарии для QA
 
@@ -72,12 +72,12 @@
 
 ## Статус выполнения
 
-**Статус:** review
+**Статус:** fail
 
 **Ветка:** feature/TASK-005-navigation
-**PR:** (заполнит Developer после открытия PR)
-**QA вердикт:** pending
-**Мерж:** ожидает
+**PR:** https://github.com/hlopech/LocalGuide-Planner/pull/4
+**QA вердикт:** FAIL
+**Мерж:** заблокирован
 
 ### История статусов
 | Дата | Статус | Агент | Примечание |
@@ -85,3 +85,4 @@
 | 2026-03-14 | todo | Tech Director | Задача создана |
 | 2026-03-14 | in_progress | Developer | Начата реализация |
 | 2026-03-14 | review | Developer | Реализация завершена, открыт PR |
+| 2026-03-14 | fail | QA Tester | BUG-005 (Critical): Unresolved reference 'OnboardingScreen' — проект не компилируется. BUG-006 (Medium): 4 hardcoded строки в AppNavGraph.kt и MainScreen.kt. Требуется: смержить TASK-004 в develop, затем rebase TASK-005; исправить hardcoded строки. |

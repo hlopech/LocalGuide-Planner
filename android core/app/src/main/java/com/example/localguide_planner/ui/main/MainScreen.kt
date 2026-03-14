@@ -73,7 +73,7 @@ fun MainScreen() {
 
 @Composable
 private fun PlacesListPlaceholder() {
-    Text(text = "Places list placeholder")
+    Text(text = stringResource(R.string.placeholder_places_list))
 }
 
 @Preview(showBackground = true)

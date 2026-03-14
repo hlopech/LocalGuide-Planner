@@ -1,11 +1,19 @@
 <resources>
     <string name="app_name">LocalGuide_Planner</string>
+    <!-- Onboarding -->
     <string name="onboarding_title">Добро пожаловать!</string>
     <string name="onboarding_subtitle">Как вас зовут?</string>
     <string name="onboarding_name_label">Ваше имя</string>
     <string name="onboarding_name_error_empty">Введите имя</string>
     <string name="onboarding_name_error_too_long">Имя не должно превышать 50 символов</string>
     <string name="onboarding_button_continue">Начать</string>
+    <!-- Navigation -->
     <string name="nav_places">Места</string>
     <string name="app_bar_title_places">Мои места</string>
+    <!-- Placeholders (Sprint 1 — will be replaced in future tasks) -->
+    <string name="placeholder_onboarding">Экран онбординга</string>
+    <string name="placeholder_place_detail">Детали места</string>
+    <string name="placeholder_add_place">Добавление места</string>
+    <string name="placeholder_edit_place">Редактирование места</string>
+    <string name="placeholder_places_list">Список мест</string>
 </resources>

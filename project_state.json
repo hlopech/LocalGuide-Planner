@@ -29,9 +29,9 @@
   },
 
   "current_focus": {
-    "agent": "developer",
-    "action": "implement_TASK-003",
-    "context": "Data layer: Room DB, DAO, DataStore, RepositoryImpl, Hilt modules"
+    "agent": "qa_tester",
+    "action": "qa_review_TASK-004",
+    "context": "TASK-005 merged into develop. TASK-004 fixed BUG-009 (runCatching + tests + strings), rebased on develop. PR #5 awaits QA re-review."
   },
 
   "tasks": [
@@ -70,10 +70,25 @@
       "title": "Data-слой — Room, DAO, PlaceMapper, DataStore, RepositoryImpl, Hilt-модули",
       "type": "feature",
       "priority": "Critical",
-      "status": "in_progress",
-      "assigned_to": "developer",
+      "status": "done",
+      "assigned_to": null,
       "sprint": "SPRINT-1",
       "branch": "feature/TASK-003-data-layer",
+      "pr": "#3",
+      "qa_verdict": "PASS",
+      "merged": true,
+      "created_at": "2026-03-14",
+      "updated_at": "2026-03-14"
+    },
+    {
+      "id": "TASK-003b",
+      "title": "PlaceDaoTest — инструментальные тесты DAO с in-memory Room",
+      "type": "feature",
+      "priority": "Medium",
+      "status": "todo",
+      "assigned_to": null,
+      "sprint": "SPRINT-1",
+      "branch": null,
       "pr": null,
       "qa_verdict": null,
       "merged": false,
@@ -85,13 +100,14 @@
       "title": "Онбординг — OnboardingScreen + OnboardingViewModel",
       "type": "feature",
       "priority": "Critical",
-      "status": "todo",
+      "status": "review",
       "assigned_to": null,
       "sprint": "SPRINT-1",
-      "branch": null,
-      "pr": null,
-      "qa_verdict": null,
+      "branch": "feature/TASK-004-onboarding",
+      "pr": "#5",
+      "qa_verdict": "pending",
       "merged": false,
+      "notes": "BUG-009 fixed (runCatching), strings aligned with spec, 3 new tests added. Rebased on develop. Awaiting QA re-review.",
       "created_at": "2026-03-14",
       "updated_at": "2026-03-14"
     },
@@ -100,13 +116,13 @@
       "title": "Навигация — граф экранов, BottomNavBar, MainScreen, MainViewModel",
       "type": "feature",
       "priority": "Critical",
-      "status": "todo",
+      "status": "done",
       "assigned_to": null,
       "sprint": "SPRINT-1",
-      "branch": null,
-      "pr": null,
-      "qa_verdict": null,
-      "merged": false,
+      "branch": "feature/TASK-005-navigation",
+      "pr": "#4",
+      "qa_verdict": "PASS",
+      "merged": true,
       "created_at": "2026-03-14",
       "updated_at": "2026-03-14"
     },
@@ -122,6 +138,7 @@
       "pr": null,
       "qa_verdict": null,
       "merged": false,
+      "blocked_by": ["TASK-005"],
       "created_at": "2026-03-14",
       "updated_at": "2026-03-14"
     },
@@ -137,6 +154,7 @@
       "pr": null,
       "qa_verdict": null,
       "merged": false,
+      "blocked_by": ["TASK-005", "TASK-006"],
       "created_at": "2026-03-14",
       "updated_at": "2026-03-14"
     },
@@ -152,42 +170,95 @@
       "pr": null,
       "qa_verdict": null,
       "merged": false,
+      "blocked_by": ["TASK-005", "TASK-006"],
       "created_at": "2026-03-14",
       "updated_at": "2026-03-14"
     }
   ],
 
-  "bugs": [],
+  "bugs": [
+    {
+      "id": "BUG-001",
+      "title": "room-testing в неверном gradle scope",
+      "status": "closed",
+      "related_task": "TASK-003",
+      "closed_at": "2026-03-14"
+    },
+    {
+      "id": "BUG-002",
+      "title": "PlacesRepositoryImplTest использует MockK вместо in-memory Room",
+      "status": "closed",
+      "related_task": "TASK-003",
+      "closed_at": "2026-03-14",
+      "resolution": "Tech Director: MockK принят как правильный подход для repository unit-тестов. DAO-тесты вынесены в TASK-003b"
+    },
+    {
+      "id": "BUG-003",
+      "title": "Onboarding строки отсутствуют в strings.xml на ветке TASK-004",
+      "status": "closed",
+      "related_task": "TASK-004",
+      "closed_at": "2026-03-14"
+    },
+    {
+      "id": "BUG-004",
+      "title": "Turbine dependency отсутствует в libs.versions.toml",
+      "status": "closed",
+      "related_task": "TASK-004",
+      "closed_at": "2026-03-14"
+    },
+    {
+      "id": "BUG-005",
+      "title": "AppNavGraph.kt: Unresolved reference 'OnboardingScreen'",
+      "status": "closed",
+      "related_task": "TASK-005",
+      "closed_at": "2026-03-14"
+    },
+    {
+      "id": "BUG-006",
+      "title": "4 hardcoded placeholder строки в AppNavGraph.kt и MainScreen.kt",
+      "status": "closed",
+      "related_task": "TASK-005",
+      "closed_at": "2026-03-14"
+    },
+    {
+      "id": "BUG-007",
+      "title": "AppNavGraph.kt: удалён механизм навигации onOnboardingCompleted + popUpTo",
+      "status": "closed",
+      "related_task": "TASK-005",
+      "closed_at": "2026-03-14"
+    },
+    {
+      "id": "BUG-009",
+      "title": "OnboardingViewModel: нет try/catch — isLoading зависает, возможен крэш",
+      "status": "fixed",
+      "related_task": "TASK-004",
+      "fixed_at": "2026-03-14",
+      "notes": "Исправлено: runCatching, 3 новых теста, строки выравнены. Ожидает QA финального review."
+    }
+  ],
 
   "git": {
     "main_branch": "main",
     "dev_branch": "develop",
-    "active_branches": ["feature/TASK-003-data-layer"],
-    "open_prs": []
+    "active_branches": ["feature/TASK-004-onboarding"],
+    "merged_branches": [
+      "feature/TASK-001-setup-dependencies",
+      "feature/TASK-002-domain-layer",
+      "feature/TASK-003-data-layer",
+      "feature/TASK-005-navigation"
+    ],
+    "open_prs": [
+      {"number": 5, "title": "[TASK-004] OnboardingScreen", "branch": "feature/TASK-004-onboarding", "status": "open"}
+    ]
   },
 
   "stats": {
-    "tasks_total": 8,
-    "tasks_done": 2,
+    "tasks_total": 9,
+    "tasks_done": 4,
     "tasks_in_progress": 1,
-    "tasks_blocked": 0,
+    "tasks_todo": 4,
     "bugs_open": 0,
-    "bugs_closed": 0
-  },
-
-  "_task_schema": {
-    "id": "TASK-NNN",
-    "title": "...",
-    "type": "feature | bugfix | refactor | chore",
-    "priority": "Critical | High | Medium | Low",
-    "status": "todo | in_progress | review | qa_review | done | blocked",
-    "assigned_to": "developer | qa_tester | tech_director | null",
-    "sprint": "SPRINT-N",
-    "branch": "feature/TASK-NNN-name | null",
-    "pr": "#NNN | null",
-    "qa_verdict": "pending | PASS | FAIL | null",
-    "merged": false,
-    "created_at": "YYYY-MM-DD",
-    "updated_at": "YYYY-MM-DD"
+    "bugs_fixed_pending_qa": 1,
+    "bugs_closed": 7
   }
 }

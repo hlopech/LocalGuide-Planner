@@ -46,9 +46,14 @@ class OnboardingViewModel @Inject constructor(
         }
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            saveUserProfileUseCase(UserProfile(name = name, isOnboardingCompleted = true))
-            _uiState.update { it.copy(isLoading = false) }
-            _uiEffect.emit(OnboardingUiEffect.NavigateToMain)
+            runCatching {
+                saveUserProfileUseCase(UserProfile(name = name, isOnboardingCompleted = true))
+            }.onSuccess {
+                _uiState.update { it.copy(isLoading = false) }
+                _uiEffect.emit(OnboardingUiEffect.NavigateToMain)
+            }.onFailure {
+                _uiState.update { it.copy(isLoading = false) }
+            }
         }
     }
 

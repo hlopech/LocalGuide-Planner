@@ -142,4 +142,44 @@ class OnboardingViewModelTest {
         viewModel.onNameChanged("А")
         assertNull(viewModel.uiState.value.nameError)
     }
+
+    @Test
+    fun `onGetStartedClicked with name of exactly 50 chars passes validation and calls UseCase`() = runTest {
+        val exactName = "А".repeat(50)
+        val expectedProfile = UserProfile(name = exactName, isOnboardingCompleted = true)
+        coEvery { saveUserProfileUseCase(expectedProfile) } returns Unit
+
+        viewModel.onNameChanged(exactName)
+        viewModel.onGetStartedClicked()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.nameError)
+        coVerify(exactly = 1) { saveUserProfileUseCase(expectedProfile) }
+    }
+
+    @Test
+    fun `onGetStartedClicked sets isLoading false when UseCase throws exception`() = runTest {
+        val profile = UserProfile(name = "Алексей", isOnboardingCompleted = true)
+        coEvery { saveUserProfileUseCase(profile) } throws RuntimeException("DataStore write failed")
+
+        viewModel.onNameChanged("Алексей")
+        viewModel.onGetStartedClicked()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(false, viewModel.uiState.value.isLoading)
+    }
+
+    @Test
+    fun `onGetStartedClicked does not emit NavigateToMain when UseCase throws exception`() = runTest {
+        val profile = UserProfile(name = "Алексей", isOnboardingCompleted = true)
+        coEvery { saveUserProfileUseCase(profile) } throws RuntimeException("DataStore write failed")
+
+        viewModel.uiEffect.test {
+            viewModel.onNameChanged("Алексей")
+            viewModel.onGetStartedClicked()
+            testDispatcher.scheduler.advanceUntilIdle()
+
+            expectNoEvents()
+        }
+    }
 }

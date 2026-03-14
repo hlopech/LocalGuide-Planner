@@ -30,8 +30,8 @@
 
   "current_focus": {
     "agent": "developer",
-    "action": "implement_TASK-002",
-    "context": "Domain layer: Place/UserProfile models + UseCases + repository interfaces"
+    "action": "implement_TASK-003",
+    "context": "Data layer: Room DB, DAO, DataStore, RepositoryImpl, Hilt modules"
   },
 
   "tasks": [
@@ -55,13 +55,13 @@
       "title": "Доменный слой — модели Place/UserProfile + UseCase + интерфейсы репозиториев",
       "type": "feature",
       "priority": "Critical",
-      "status": "in_progress",
-      "assigned_to": "developer",
+      "status": "done",
+      "assigned_to": null,
       "sprint": "SPRINT-1",
       "branch": "feature/TASK-002-domain-layer",
-      "pr": null,
-      "qa_verdict": null,
-      "merged": false,
+      "pr": "#2",
+      "qa_verdict": "PASS",
+      "merged": true,
       "created_at": "2026-03-14",
       "updated_at": "2026-03-14"
     },
@@ -70,10 +70,10 @@
       "title": "Data-слой — Room, DAO, PlaceMapper, DataStore, RepositoryImpl, Hilt-модули",
       "type": "feature",
       "priority": "Critical",
-      "status": "todo",
-      "assigned_to": null,
+      "status": "in_progress",
+      "assigned_to": "developer",
       "sprint": "SPRINT-1",
-      "branch": null,
+      "branch": "feature/TASK-003-data-layer",
       "pr": null,
       "qa_verdict": null,
       "merged": false,
@@ -162,13 +162,13 @@
   "git": {
     "main_branch": "main",
     "dev_branch": "develop",
-    "active_branches": ["feature/TASK-002-domain-layer"],
+    "active_branches": ["feature/TASK-003-data-layer"],
     "open_prs": []
   },
 
   "stats": {
     "tasks_total": 8,
-    "tasks_done": 1,
+    "tasks_done": 2,
     "tasks_in_progress": 1,
     "tasks_blocked": 0,
     "bugs_open": 0,

@@ -22,6 +22,12 @@ fun AppNavGraph(startDestination: String) {
         startDestination = startDestination,
     ) {
         composable(route = Screen.Onboarding.route) {
+            // TODO(TASK-004): заменить на OnboardingScreen(onCompleted = onOnboardingCompleted)
+            val onOnboardingCompleted: () -> Unit = {
+                navController.navigate(Screen.Main.route) {
+                    popUpTo(Screen.Onboarding.route) { inclusive = true }
+                }
+            }
             // Placeholder — будет заменён на OnboardingScreen после мержа TASK-004
             Text(text = stringResource(R.string.placeholder_onboarding))
         }

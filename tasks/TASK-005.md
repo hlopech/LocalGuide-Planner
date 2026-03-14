@@ -45,7 +45,7 @@
 ## Критерии приёма (Definition of Done)
 
 - [x] `Screen.kt` содержит все маршруты: Onboarding, Main, PlacesList, PlaceDetail, AddPlace, EditPlace
-- [x] `AppNavGraph.kt` настраивает NavHost с корректными маршрутами и аргументами
+- [ ] `AppNavGraph.kt` настраивает NavHost с корректными маршрутами и аргументами
 - [x] `MainViewModel` определяет startDestination через `IsOnboardingCompletedUseCase`
 - [x] `MainScreen` содержит Scaffold с TopAppBar и BottomNavigationBar (1 вкладка "Места")
 - [x] `MainActivity` показывает `CircularProgressIndicator` пока startDestination == null
@@ -86,3 +86,4 @@
 | 2026-03-14 | in_progress | Developer | Начата реализация |
 | 2026-03-14 | review | Developer | Реализация завершена, открыт PR |
 | 2026-03-14 | fail | QA Tester | BUG-005 (Critical): Unresolved reference 'OnboardingScreen' — проект не компилируется. BUG-006 (Medium): 4 hardcoded строки в AppNavGraph.kt и MainScreen.kt. Требуется: смержить TASK-004 в develop, затем rebase TASK-005; исправить hardcoded строки. |
+| 2026-03-14 | fail | QA Tester | BUG-007 (High): При исправлении BUG-005 удалён механизм навигации onOnboardingCompleted + popUpTo(Screen.Onboarding.route){inclusive=true} из AppNavGraph.kt. Acceptance criterion нарушен. Требуется восстановить навигационную логику очистки back stack. |

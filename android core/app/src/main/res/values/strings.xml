@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">LocalGuide_Planner</string>
+    <string name="onboarding_title">Добро пожаловать!</string>
+    <string name="onboarding_subtitle">Как вас зовут?</string>
+    <string name="onboarding_name_label">Ваше имя</string>
+    <string name="onboarding_name_error_empty">Введите имя</string>
+    <string name="onboarding_name_error_too_long">Имя не должно превышать 50 символов</string>
+    <string name="onboarding_button_continue">Начать</string>
+    <string name="nav_places">Места</string>
+    <string name="app_bar_title_places">Мои места</string>
 </resources>

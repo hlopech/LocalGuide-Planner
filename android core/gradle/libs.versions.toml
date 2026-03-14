@@ -62,6 +62,7 @@ coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-
 
 # MockK
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 # Turbine
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.localguide_planner.R
-import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
+import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 
 @Composable
 fun OnboardingScreen(
@@ -113,7 +113,7 @@ fun OnboardingContent(
 @Preview(showBackground = true)
 @Composable
 fun OnboardingContentPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         OnboardingContent(
             uiState = OnboardingUiState(name = "Алексей"),
             onNameChanged = {},
@@ -125,7 +125,7 @@ fun OnboardingContentPreview() {
 @Preview(showBackground = true, name = "Onboarding - empty state")
 @Composable
 fun OnboardingContentEmptyPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         OnboardingContent(
             uiState = OnboardingUiState(),
             onNameChanged = {},
@@ -137,7 +137,7 @@ fun OnboardingContentEmptyPreview() {
 @Preview(showBackground = true, name = "Onboarding - error state")
 @Composable
 fun OnboardingContentErrorPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         OnboardingContent(
             uiState = OnboardingUiState(nameError = OnboardingViewModel.NAME_ERROR_EMPTY),
             onNameChanged = {},
@@ -149,7 +149,7 @@ fun OnboardingContentErrorPreview() {
 @Preview(showBackground = true, name = "Onboarding - loading state")
 @Composable
 fun OnboardingContentLoadingPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         OnboardingContent(
             uiState = OnboardingUiState(name = "Алексей", isLoading = true),
             onNameChanged = {},

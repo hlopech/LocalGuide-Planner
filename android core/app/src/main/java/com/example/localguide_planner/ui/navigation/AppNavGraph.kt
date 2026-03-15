@@ -11,7 +11,7 @@ import com.example.localguide_planner.ui.main.MainScreen
 import com.example.localguide_planner.ui.onboarding.OnboardingScreen
 import com.example.localguide_planner.ui.places.addedit.AddEditPlaceScreen
 import com.example.localguide_planner.ui.places.detail.PlaceDetailScreen
-import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
+import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 
 @Composable
 fun AppNavGraph(startDestination: String) {
@@ -78,7 +78,7 @@ fun AppNavGraph(startDestination: String) {
 @Preview(showBackground = true)
 @Composable
 fun AppNavGraphPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         AppNavGraph(startDestination = Screen.Main.route)
     }
 }

@@ -47,7 +47,7 @@ import com.example.localguide_planner.R
 import com.example.localguide_planner.domain.model.Place
 import com.example.localguide_planner.domain.model.PlaceCategory
 import com.example.localguide_planner.ui.places.common.toStringRes
-import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
+import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 
 @Composable
 fun PlaceDetailScreen(
@@ -353,7 +353,7 @@ private fun DeleteConfirmDialog(
 @Preview(showBackground = true, name = "PlaceDetailScreen — Success")
 @Composable
 fun PlaceDetailScreenSuccessPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         PlaceDetailContent(
             uiState = PlaceDetailUiState.Success(
                 place = Place(
@@ -379,7 +379,7 @@ fun PlaceDetailScreenSuccessPreview() {
 @Preview(showBackground = true, name = "PlaceDetailScreen — Loading")
 @Composable
 fun PlaceDetailScreenLoadingPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         PlaceDetailContent(
             uiState = PlaceDetailUiState.Loading,
             onNavigateBack = {},
@@ -393,7 +393,7 @@ fun PlaceDetailScreenLoadingPreview() {
 @Preview(showBackground = true, name = "PlaceDetailScreen — Error")
 @Composable
 fun PlaceDetailScreenErrorPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         PlaceDetailContent(
             uiState = PlaceDetailUiState.Error(message = "Место не найдено"),
             onNavigateBack = {},

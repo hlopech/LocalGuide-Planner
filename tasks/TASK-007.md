@@ -194,9 +194,9 @@ class PlaceDetailViewModel @Inject constructor(
 
 ## Статус выполнения
 
-**Статус:** todo
+**Статус:** review
 
-**Ветка:** feature/TASK-007-place-detail (заполняет Developer)
+**Ветка:** feature/TASK-007-place-detail
 **PR:** — (заполняет Developer)
 **QA вердикт:** pending
 **Мерж:** ожидает
@@ -205,3 +205,4 @@ class PlaceDetailViewModel @Inject constructor(
 | Дата | Статус | Агент | Примечание |
 |------|--------|-------|-----------|
 | 2026-03-14 | todo | Tech Director | Задача создана |
+| 2026-03-15 | review | Developer | Реализованы PlaceDetailScreen, PlaceDetailViewModel, тесты |

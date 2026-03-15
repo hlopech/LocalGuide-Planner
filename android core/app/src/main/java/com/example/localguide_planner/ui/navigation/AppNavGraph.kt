@@ -1,16 +1,14 @@
 package com.example.localguide_planner.ui.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.localguide_planner.R
 import com.example.localguide_planner.ui.main.MainScreen
+import com.example.localguide_planner.ui.onboarding.OnboardingScreen
 import com.example.localguide_planner.ui.places.addedit.AddEditPlaceScreen
 import com.example.localguide_planner.ui.places.detail.PlaceDetailScreen
 import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
@@ -24,14 +22,13 @@ fun AppNavGraph(startDestination: String) {
         startDestination = startDestination,
     ) {
         composable(route = Screen.Onboarding.route) {
-            // TODO(TASK-004): заменить на OnboardingScreen(onCompleted = onOnboardingCompleted)
-            val onOnboardingCompleted: () -> Unit = {
-                navController.navigate(Screen.Main.route) {
-                    popUpTo(Screen.Onboarding.route) { inclusive = true }
+            OnboardingScreen(
+                onOnboardingCompleted = {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(Screen.Onboarding.route) { inclusive = true }
+                    }
                 }
-            }
-            // Placeholder — будет заменён на OnboardingScreen после мержа TASK-004
-            Text(text = stringResource(R.string.placeholder_onboarding))
+            )
         }
 
         composable(route = Screen.Main.route) {

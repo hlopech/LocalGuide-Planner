@@ -66,10 +66,11 @@ internal fun PlacesListContent(
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val errorText = stringResource(R.string.places_error_loading)
 
     LaunchedEffect(uiState.errorMessage) {
         if (uiState.errorMessage != null) {
-            snackbarHostState.showSnackbar(uiState.errorMessage)
+            snackbarHostState.showSnackbar(errorText)
         }
     }
 
@@ -83,40 +84,66 @@ internal fun PlacesListContent(
                 )
             }
         },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) { data ->
-                Snackbar(snackbarData = data)
-            }
-        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) { Snackbar(it) } },
     ) { innerPadding ->
-        Box(
+        PlacesListBody(
+            uiState = uiState,
+            onNavigateToDetail = onNavigateToDetail,
+            onNavigateToAdd = onNavigateToAdd,
+            onDeletePlace = onDeletePlace,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-        ) {
-            when {
-                uiState.isLoading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
+        )
+    }
+}
 
-                uiState.places.isEmpty() -> {
-                    EmptyPlacesContent(
-                        onAddClick = onNavigateToAdd,
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
+@Composable
+private fun PlacesListBody(
+    uiState: PlacesListUiState,
+    onNavigateToDetail: (String) -> Unit,
+    onNavigateToAdd: () -> Unit,
+    onDeletePlace: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        when {
+            uiState.isLoading -> {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
 
-                else -> {
-                    PlacesList(
-                        places = uiState.places,
-                        onPlaceClick = { place -> onNavigateToDetail(place.id) },
-                        onDeleteClick = { place -> onDeletePlace(place.id) },
-                    )
-                }
+            uiState.errorMessage != null -> {
+                ErrorContent(
+                    modifier = Modifier.align(Alignment.Center),
+                )
+            }
+
+            uiState.places.isEmpty() -> {
+                EmptyPlacesContent(
+                    onAddClick = onNavigateToAdd,
+                    modifier = Modifier.align(Alignment.Center),
+                )
+            }
+
+            else -> {
+                PlacesList(
+                    places = uiState.places,
+                    onPlaceClick = { place -> onNavigateToDetail(place.id) },
+                    onDeleteClick = { place -> onDeletePlace(place.id) },
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun ErrorContent(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.padding(32.dp), contentAlignment = Alignment.Center) {
+        Text(
+            text = stringResource(R.string.places_error_loading),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.error,
+        )
     }
 }
 
@@ -153,10 +180,7 @@ private fun PlacesList(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(
-            items = places,
-            key = { place -> place.id },
-        ) { place ->
+        items(items = places, key = { it.id }) { place ->
             PlaceCard(
                 place = place,
                 onClick = { onPlaceClick(place) },
@@ -211,10 +235,7 @@ fun PlacesListScreenWithDataPreview() {
 fun PlacesListScreenEmptyPreview() {
     LocalGuide_PlannerTheme {
         PlacesListContent(
-            uiState = PlacesListUiState(
-                places = emptyList(),
-                isLoading = false,
-            ),
+            uiState = PlacesListUiState(places = emptyList(), isLoading = false),
             onNavigateToDetail = {},
             onNavigateToAdd = {},
             onDeletePlace = {},
@@ -228,6 +249,19 @@ fun PlacesListScreenLoadingPreview() {
     LocalGuide_PlannerTheme {
         PlacesListContent(
             uiState = PlacesListUiState(isLoading = true),
+            onNavigateToDetail = {},
+            onNavigateToAdd = {},
+            onDeletePlace = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "PlacesListScreen — error")
+@Composable
+fun PlacesListScreenErrorPreview() {
+    LocalGuide_PlannerTheme {
+        PlacesListContent(
+            uiState = PlacesListUiState(isLoading = false, errorMessage = "error"),
             onNavigateToDetail = {},
             onNavigateToAdd = {},
             onDeletePlace = {},

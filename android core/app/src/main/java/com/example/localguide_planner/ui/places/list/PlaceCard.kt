@@ -1,5 +1,6 @@
 package com.example.localguide_planner.ui.places.list
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,17 @@ import com.example.localguide_planner.domain.model.Place
 import com.example.localguide_planner.domain.model.PlaceCategory
 import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
 
+@StringRes
+private fun PlaceCategory.toStringRes(): Int = when (this) {
+    PlaceCategory.RESTAURANT -> R.string.category_restaurant
+    PlaceCategory.CAFE -> R.string.category_cafe
+    PlaceCategory.PARK -> R.string.category_park
+    PlaceCategory.MUSEUM -> R.string.category_museum
+    PlaceCategory.SHOP -> R.string.category_shop
+    PlaceCategory.LANDMARK -> R.string.category_landmark
+    PlaceCategory.OTHER -> R.string.category_other
+}
+
 @Composable
 fun PlaceCard(
     place: Place,
@@ -43,52 +55,64 @@ fun PlaceCard(
             .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = place.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f),
-                )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = if (place.isFavorite) {
-                            Icons.Default.Favorite
-                        } else {
-                            Icons.Default.FavoriteBorder
-                        },
-                        contentDescription = null,
-                        tint = if (place.isFavorite) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        },
-                    )
-                    IconButton(onClick = onDeleteClick) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = stringResource(R.string.place_card_delete),
-                            tint = MaterialTheme.colorScheme.error,
-                        )
-                    }
-                }
-            }
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+            PlaceCardHeader(place = place, onDeleteClick = onDeleteClick)
             Spacer(modifier = Modifier.height(4.dp))
             SuggestionChip(
                 onClick = {},
-                label = { Text(text = place.category.name) },
+                label = { Text(text = stringResource(place.category.toStringRes())) },
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = place.address,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlaceCardHeader(
+    place: Place,
+    onDeleteClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = place.name,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.weight(1f),
+        )
+        PlaceCardActions(isFavorite = place.isFavorite, onDeleteClick = onDeleteClick)
+    }
+}
+
+@Composable
+private fun PlaceCardActions(
+    isFavorite: Boolean,
+    onDeleteClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            contentDescription = null,
+            tint = if (isFavorite) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            },
+        )
+        IconButton(onClick = onDeleteClick) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = stringResource(R.string.place_card_delete),
+                tint = MaterialTheme.colorScheme.error,
             )
         }
     }

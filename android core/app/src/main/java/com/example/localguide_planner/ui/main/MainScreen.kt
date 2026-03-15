@@ -23,11 +23,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.localguide_planner.R
 import com.example.localguide_planner.ui.navigation.Screen
+import com.example.localguide_planner.ui.places.list.PlacesListScreen
 import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    onNavigateToDetail: (String) -> Unit = {},
+    onNavigateToAdd: () -> Unit = {},
+) {
     val nestedNavController = rememberNavController()
     val navBackStackEntry by nestedNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -65,15 +69,13 @@ fun MainScreen() {
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(route = Screen.PlacesList.route) {
-                PlacesListPlaceholder()
+                PlacesListScreen(
+                    onNavigateToDetail = onNavigateToDetail,
+                    onNavigateToAdd = onNavigateToAdd,
+                )
             }
         }
     }
-}
-
-@Composable
-private fun PlacesListPlaceholder() {
-    Text(text = stringResource(R.string.placeholder_places_list))
 }
 
 @Preview(showBackground = true)

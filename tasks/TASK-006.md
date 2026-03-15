@@ -167,7 +167,7 @@ fun PlaceCard(
 **Статус:** review
 
 **Ветка:** feature/TASK-006-places-list
-**PR:** (заполняет Developer после push)
+**PR:** https://github.com/hlopech/LocalGuide-Planner/pull/6
 **QA вердикт:** pending
 **Мерж:** ожидает
 

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
@@ -116,8 +117,11 @@ internal fun PlaceDetailContent(
                 }
 
                 is PlaceDetailUiState.Error -> {
+                    val message = uiState.message.ifEmpty {
+                        stringResource(R.string.place_detail_not_found)
+                    }
                     PlaceDetailErrorContent(
-                        message = uiState.message,
+                        message = message,
                         onNavigateBack = onNavigateBack,
                         modifier = Modifier.align(Alignment.Center),
                     )
@@ -141,7 +145,7 @@ private fun PlaceDetailTopBar(
         navigationIcon = {
             IconButton(onClick = onNavigateBack) {
                 Icon(
-                    imageVector = Icons.Default.LocationOn,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = null,
                 )
             }
@@ -182,14 +186,40 @@ private fun PlaceDetailSuccessContent(
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
+        PlaceDetailCategorySection(category = place.category)
+        Spacer(modifier = Modifier.height(16.dp))
+        PlaceDetailAddressSection(address = place.address)
+        Spacer(modifier = Modifier.height(16.dp))
+        PlaceDetailDescriptionSection(description = place.description)
+        Spacer(modifier = Modifier.height(24.dp))
+        PlaceDetailActionButtons(
+            isFavorite = place.isFavorite,
+            onToggleFavorite = onToggleFavorite,
+            onDeleteClicked = { showDeleteDialog = true },
+        )
+    }
+}
+
+@Composable
+private fun PlaceDetailCategorySection(
+    category: PlaceCategory,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
         PlaceDetailSectionLabel(text = stringResource(R.string.place_detail_section_category))
         SuggestionChip(
             onClick = {},
-            label = { Text(text = stringResource(place.category.toStringRes())) },
+            label = { Text(text = stringResource(category.toStringRes())) },
         )
+    }
+}
 
-        Spacer(modifier = Modifier.height(16.dp))
-
+@Composable
+private fun PlaceDetailAddressSection(
+    address: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
         PlaceDetailSectionLabel(text = stringResource(R.string.place_detail_section_address))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -198,42 +228,54 @@ private fun PlaceDetailSuccessContent(
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
-                text = place.address,
+                text = address,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(start = 4.dp),
             )
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(16.dp))
-
+@Composable
+private fun PlaceDetailDescriptionSection(
+    description: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
         PlaceDetailSectionLabel(text = stringResource(R.string.place_detail_section_description))
         Text(
-            text = place.description,
+            text = description,
             style = MaterialTheme.typography.bodyMedium,
         )
+    }
+}
 
-        Spacer(modifier = Modifier.height(24.dp))
-
+@Composable
+private fun PlaceDetailActionButtons(
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit,
+    onDeleteClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
         IconButton(onClick = onToggleFavorite) {
             Icon(
-                imageVector = if (place.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                contentDescription = if (place.isFavorite) {
+                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = if (isFavorite) {
                     stringResource(R.string.place_detail_favorite_remove)
                 } else {
                     stringResource(R.string.place_detail_favorite_add)
                 },
-                tint = if (place.isFavorite) {
+                tint = if (isFavorite) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
                 },
             )
         }
-
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedButton(
-            onClick = { showDeleteDialog = true },
+            onClick = onDeleteClicked,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Icon(
@@ -280,7 +322,7 @@ private fun PlaceDetailErrorContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = onNavigateBack) {
-            Text(text = stringResource(R.string.dialog_cancel))
+            Text(text = stringResource(R.string.action_go_back))
         }
     }
 }

@@ -37,6 +37,7 @@
     <string name="place_detail_not_found">Место не найдено</string>
     <string name="dialog_confirm">Подтвердить</string>
     <string name="dialog_cancel">Отмена</string>
+    <string name="action_go_back">Назад</string>
     <!-- Placeholders (Sprint 1 — will be replaced in future tasks) -->
     <string name="placeholder_onboarding">Экран онбординга</string>
     <string name="placeholder_place_detail">Детали места</string>

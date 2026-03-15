@@ -43,7 +43,7 @@ class PlaceDetailViewModel @Inject constructor(
             _uiState.value = if (place != null) {
                 PlaceDetailUiState.Success(place)
             } else {
-                PlaceDetailUiState.Error("Место не найдено")
+                PlaceDetailUiState.Error()
             }
         }
     }

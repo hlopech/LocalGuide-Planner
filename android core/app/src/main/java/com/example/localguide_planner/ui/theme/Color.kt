@@ -84,6 +84,13 @@ val InversePrimaryDark = Color(0xFFC0410D)
 
 val ScrimDark = Color(0xFF000000)
 
+// ---- Gradient helpers ----
+
+val GradientHeroStart = Color(0xFFE8622A)
+val GradientHeroEnd = Color(0xFFC0410D)
+val GradientOverlayTransparent = Color(0x00000000)
+val GradientOverlaySemiDark = Color(0x99000000)
+
 // ---- Category accent colours ----
 
 val CategoryRestaurant = Color(0xFFD32F2F)

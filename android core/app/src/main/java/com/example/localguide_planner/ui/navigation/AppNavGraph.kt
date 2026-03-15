@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.localguide_planner.R
 import com.example.localguide_planner.ui.main.MainScreen
+import com.example.localguide_planner.ui.places.addedit.AddEditPlaceScreen
 import com.example.localguide_planner.ui.places.detail.PlaceDetailScreen
 import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
 
@@ -59,7 +60,9 @@ fun AppNavGraph(startDestination: String) {
         }
 
         composable(route = Screen.AddPlace.route) {
-            Text(text = stringResource(R.string.placeholder_add_place))
+            AddEditPlaceScreen(
+                onNavigateBack = { navController.popBackStack() },
+            )
         }
 
         composable(
@@ -68,7 +71,9 @@ fun AppNavGraph(startDestination: String) {
                 navArgument(Screen.EditPlace.ARG_PLACE_ID) { type = NavType.StringType },
             ),
         ) {
-            Text(text = stringResource(R.string.placeholder_edit_place))
+            AddEditPlaceScreen(
+                onNavigateBack = { navController.popBackStack() },
+            )
         }
     }
 }

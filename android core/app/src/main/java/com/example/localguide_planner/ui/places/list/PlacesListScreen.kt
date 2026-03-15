@@ -37,7 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.localguide_planner.R
 import com.example.localguide_planner.domain.model.Place
 import com.example.localguide_planner.domain.model.PlaceCategory
-import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
+import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 
 @Composable
 fun PlacesListScreen(
@@ -194,7 +194,7 @@ private fun PlacesList(
 @Preview(showBackground = true, name = "PlacesListScreen — with places")
 @Composable
 fun PlacesListScreenWithDataPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         PlacesListContent(
             uiState = PlacesListUiState(
                 places = listOf(
@@ -233,7 +233,7 @@ fun PlacesListScreenWithDataPreview() {
 @Preview(showBackground = true, name = "PlacesListScreen — empty")
 @Composable
 fun PlacesListScreenEmptyPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         PlacesListContent(
             uiState = PlacesListUiState(places = emptyList(), isLoading = false),
             onNavigateToDetail = {},
@@ -246,7 +246,7 @@ fun PlacesListScreenEmptyPreview() {
 @Preview(showBackground = true, name = "PlacesListScreen — loading")
 @Composable
 fun PlacesListScreenLoadingPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         PlacesListContent(
             uiState = PlacesListUiState(isLoading = true),
             onNavigateToDetail = {},
@@ -259,7 +259,7 @@ fun PlacesListScreenLoadingPreview() {
 @Preview(showBackground = true, name = "PlacesListScreen — error")
 @Composable
 fun PlacesListScreenErrorPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         PlacesListContent(
             uiState = PlacesListUiState(isLoading = false, errorMessage = "error"),
             onNavigateToDetail = {},

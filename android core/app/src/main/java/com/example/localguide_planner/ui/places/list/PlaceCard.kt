@@ -29,7 +29,7 @@ import com.example.localguide_planner.R
 import com.example.localguide_planner.domain.model.Place
 import com.example.localguide_planner.domain.model.PlaceCategory
 import com.example.localguide_planner.ui.places.common.toStringRes
-import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
+import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 
 @Composable
 fun PlaceCard(
@@ -110,7 +110,7 @@ private fun PlaceCardActions(
 @Preview(showBackground = true)
 @Composable
 fun PlaceCardPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         PlaceCard(
             place = Place(
                 id = "1",
@@ -132,7 +132,7 @@ fun PlaceCardPreview() {
 @Preview(showBackground = true, name = "PlaceCard — not favorite")
 @Composable
 fun PlaceCardNotFavoritePreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         PlaceCard(
             place = Place(
                 id = "2",

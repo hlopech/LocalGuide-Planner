@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.localguide_planner.ui.main.MainViewModel
 import com.example.localguide_planner.ui.navigation.AppNavGraph
-import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
+import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LocalGuide_PlannerTheme {
+            LocalGuidePlannerTheme {
                 val startDestination by viewModel.startDestination.collectAsStateWithLifecycle()
 
                 if (startDestination == null) {

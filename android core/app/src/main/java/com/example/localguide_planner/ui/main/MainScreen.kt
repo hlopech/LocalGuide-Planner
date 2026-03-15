@@ -24,7 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.localguide_planner.R
 import com.example.localguide_planner.ui.navigation.Screen
 import com.example.localguide_planner.ui.places.list.PlacesListScreen
-import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
+import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,7 +81,7 @@ fun MainScreen(
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         MainScreen()
     }
 }

@@ -40,7 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.localguide_planner.R
 import com.example.localguide_planner.domain.model.PlaceCategory
 import com.example.localguide_planner.ui.places.common.toStringRes
-import com.example.localguide_planner.ui.theme.LocalGuide_PlannerTheme
+import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 
 @Composable
 fun AddEditPlaceScreen(
@@ -254,7 +254,7 @@ private fun CategoryDropdown(
 @Preview(showBackground = true, name = "AddEditPlaceScreen — Add mode")
 @Composable
 fun AddEditPlaceScreenAddPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         AddEditPlaceContent(
             uiState = AddEditPlaceUiState(),
             onNameChange = {},
@@ -270,7 +270,7 @@ fun AddEditPlaceScreenAddPreview() {
 @Preview(showBackground = true, name = "AddEditPlaceScreen — Edit mode")
 @Composable
 fun AddEditPlaceScreenEditPreview() {
-    LocalGuide_PlannerTheme {
+    LocalGuidePlannerTheme {
         AddEditPlaceContent(
             uiState = AddEditPlaceUiState(
                 name = "Центральный парк",

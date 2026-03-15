@@ -10,6 +10,20 @@
     <!-- Navigation -->
     <string name="nav_places">Места</string>
     <string name="app_bar_title_places">Мои места</string>
+    <!-- Places List -->
+    <string name="places_list_empty_title">Нет сохранённых мест</string>
+    <string name="places_list_empty_action">Добавить первое место</string>
+    <string name="places_list_fab_add">Добавить место</string>
+    <string name="place_card_delete">Удалить</string>
+    <string name="places_error_loading">Не удалось загрузить места</string>
+    <!-- Place categories -->
+    <string name="category_restaurant">Ресторан</string>
+    <string name="category_cafe">Кафе</string>
+    <string name="category_park">Парк</string>
+    <string name="category_museum">Музей</string>
+    <string name="category_shop">Магазин</string>
+    <string name="category_landmark">Достопримечательность</string>
+    <string name="category_other">Другое</string>
     <!-- Placeholders (Sprint 1 — will be replaced in future tasks) -->
     <string name="placeholder_onboarding">Экран онбординга</string>
     <string name="placeholder_place_detail">Детали места</string>

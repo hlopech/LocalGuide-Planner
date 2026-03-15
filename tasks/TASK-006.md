@@ -164,10 +164,10 @@ fun PlaceCard(
 
 ## Статус выполнения
 
-**Статус:** todo
+**Статус:** review
 
-**Ветка:** feature/TASK-006-places-list (заполняет Developer)
-**PR:** — (заполняет Developer)
+**Ветка:** feature/TASK-006-places-list
+**PR:** https://github.com/hlopech/LocalGuide-Planner/pull/6
 **QA вердикт:** pending
 **Мерж:** ожидает
 
@@ -175,3 +175,4 @@ fun PlaceCard(
 | Дата | Статус | Агент | Примечание |
 |------|--------|-------|-----------|
 | 2026-03-14 | todo | Tech Director | Задача создана |
+| 2026-03-15 | review | Developer | Реализация завершена: PlacesListUiState, PlacesListViewModel, PlacesListScreen, PlaceCard, тесты зелёные (6/6), lintDebug успешен |

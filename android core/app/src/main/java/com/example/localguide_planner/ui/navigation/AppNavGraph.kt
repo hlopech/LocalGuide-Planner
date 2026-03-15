@@ -33,7 +33,14 @@ fun AppNavGraph(startDestination: String) {
         }
 
         composable(route = Screen.Main.route) {
-            MainScreen()
+            MainScreen(
+                onNavigateToDetail = { placeId ->
+                    navController.navigate(Screen.PlaceDetail(placeId).route)
+                },
+                onNavigateToAdd = {
+                    navController.navigate(Screen.AddPlace.route)
+                },
+            )
         }
 
         composable(

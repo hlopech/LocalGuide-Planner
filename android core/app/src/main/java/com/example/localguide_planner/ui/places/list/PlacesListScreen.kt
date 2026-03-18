@@ -1,5 +1,8 @@
 package com.example.localguide_planner.ui.places.list
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,12 +13,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -25,6 +29,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,6 +42,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.localguide_planner.R
 import com.example.localguide_planner.domain.model.Place
 import com.example.localguide_planner.domain.model.PlaceCategory
+import com.example.localguide_planner.ui.places.common.AnimatedPlaceCard
+import com.example.localguide_planner.ui.theme.LocalGuideDesignTokens
 import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 
 @Composable
@@ -67,6 +74,10 @@ internal fun PlacesListContent(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val errorText = stringResource(R.string.places_error_loading)
+    val listState = rememberLazyListState()
+    val isScrolled by remember {
+        derivedStateOf { listState.firstVisibleItemIndex > 0 }
+    }
 
     LaunchedEffect(uiState.errorMessage) {
         if (uiState.errorMessage != null) {
@@ -77,17 +88,20 @@ internal fun PlacesListContent(
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
-            FloatingActionButton(onClick = onNavigateToAdd) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.places_list_fab_add),
-                )
-            }
+            ExtendedFloatingActionButton(
+                text = { Text(text = stringResource(R.string.places_list_fab_add)) },
+                icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = null) },
+                onClick = onNavigateToAdd,
+                expanded = !isScrolled,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) { Snackbar(it) } },
     ) { innerPadding ->
         PlacesListBody(
             uiState = uiState,
+            listState = listState,
             onNavigateToDetail = onNavigateToDetail,
             onNavigateToAdd = onNavigateToAdd,
             onDeletePlace = onDeletePlace,
@@ -101,6 +115,7 @@ internal fun PlacesListContent(
 @Composable
 private fun PlacesListBody(
     uiState: PlacesListUiState,
+    listState: androidx.compose.foundation.lazy.LazyListState,
     onNavigateToDetail: (String) -> Unit,
     onNavigateToAdd: () -> Unit,
     onDeletePlace: (String) -> Unit,
@@ -128,6 +143,7 @@ private fun PlacesListBody(
             else -> {
                 PlacesList(
                     places = uiState.places,
+                    listState = listState,
                     onPlaceClick = { place -> onNavigateToDetail(place.id) },
                     onDeleteClick = { place -> onDeletePlace(place.id) },
                 )
@@ -171,21 +187,31 @@ private fun EmptyPlacesContent(
 @Composable
 private fun PlacesList(
     places: List<Place>,
+    listState: androidx.compose.foundation.lazy.LazyListState,
     onPlaceClick: (Place) -> Unit,
     onDeleteClick: (Place) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
+        state = listState,
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(items = places, key = { it.id }) { place ->
-            PlaceCard(
+        itemsIndexed(items = places, key = { _, place -> place.id }) { index, place ->
+            AnimatedPlaceCard(
                 place = place,
+                index = index,
                 onClick = { onPlaceClick(place) },
                 onDeleteClick = { onDeleteClick(place) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateItem(
+                        fadeInSpec = tween(
+                            durationMillis = LocalGuideDesignTokens.animationDurationMedium,
+                        ),
+                        placementSpec = spring(stiffness = Spring.StiffnessLow),
+                    ),
             )
         }
     }

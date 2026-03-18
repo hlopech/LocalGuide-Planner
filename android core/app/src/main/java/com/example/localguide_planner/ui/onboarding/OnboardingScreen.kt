@@ -2,6 +2,7 @@ package com.example.localguide_planner.ui.onboarding
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -38,7 +39,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
@@ -132,7 +132,7 @@ private fun OnboardingHeroSection(visible: Boolean) {
                     imageVector = Icons.Rounded.Explore,
                     contentDescription = null,
                     modifier = Modifier.size(80.dp),
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -143,12 +143,16 @@ private fun OnboardingHeroSection(visible: Boolean) {
                 Text(
                     text = stringResource(R.string.onboarding_title),
                     style = MaterialTheme.typography.headlineLarge,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
         }
     }
 }
+
+private fun formItemEnterTransition(delayMillis: Int): EnterTransition =
+    fadeIn(tween(300, delayMillis = delayMillis)) +
+        slideInVertically(tween(300, delayMillis = delayMillis)) { it / 2 }
 
 @Composable
 private fun OnboardingFormSection(
@@ -161,13 +165,9 @@ private fun OnboardingFormSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 32.dp),
+            .padding(horizontal = 32.dp, top = 32.dp),
     ) {
-        AnimatedVisibility(
-            visible = visible,
-            enter = fadeIn(tween(300, delayMillis = 150)) +
-                slideInVertically(tween(300, delayMillis = 150)) { it / 2 },
-        ) {
+        AnimatedVisibility(visible = visible, enter = formItemEnterTransition(150)) {
             Text(
                 text = stringResource(R.string.onboarding_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
@@ -175,11 +175,7 @@ private fun OnboardingFormSection(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        AnimatedVisibility(
-            visible = visible,
-            enter = fadeIn(tween(300, delayMillis = 250)) +
-                slideInVertically(tween(300, delayMillis = 250)) { it / 2 },
-        ) {
+        AnimatedVisibility(visible = visible, enter = formItemEnterTransition(250)) {
             OnboardingTextField(
                 value = uiState.name,
                 onValueChange = onNameChanged,
@@ -188,11 +184,7 @@ private fun OnboardingFormSection(
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
-        AnimatedVisibility(
-            visible = visible,
-            enter = fadeIn(tween(300, delayMillis = 350)) +
-                slideInVertically(tween(300, delayMillis = 350)) { it / 2 },
-        ) {
+        AnimatedVisibility(visible = visible, enter = formItemEnterTransition(350)) {
             OnboardingButton(
                 isLoading = uiState.isLoading,
                 enabled = uiState.name.isNotBlank(),
@@ -261,7 +253,7 @@ private fun OnboardingButton(
                     CircularProgressIndicator(
                         modifier = Modifier.size(20.dp),
                         strokeWidth = 2.dp,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
             } else {

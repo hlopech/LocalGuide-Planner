@@ -165,7 +165,7 @@ private fun OnboardingFormSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp, top = 32.dp),
+            .padding(start = 32.dp, top = 32.dp, end = 32.dp),
     ) {
         AnimatedVisibility(visible = visible, enter = formItemEnterTransition(150)) {
             Text(

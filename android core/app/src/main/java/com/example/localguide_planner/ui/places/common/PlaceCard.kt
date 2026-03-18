@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.example.localguide_planner.R
 import com.example.localguide_planner.domain.model.Place
 import com.example.localguide_planner.domain.model.PlaceCategory
+import com.example.localguide_planner.ui.theme.FavoriteRed
 import com.example.localguide_planner.ui.theme.LocalGuideDesignTokens
 import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 import kotlinx.coroutines.delay
@@ -71,46 +72,54 @@ fun PlaceCard(
         ) {
             CategoryAccentBox(category = place.category)
             Spacer(modifier = Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = place.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Text(
-                    text = place.address,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Row(
-                    modifier = Modifier.padding(top = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    SuggestionChip(
-                        onClick = {},
-                        label = {
-                            Text(text = stringResource(place.category.toStringRes()))
-                        },
-                    )
-                    if (place.isFavorite) {
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Icon(
-                            imageVector = Icons.Rounded.Favorite,
-                            contentDescription = null,
-                            tint = Color(0xFFE53935),
-                            modifier = Modifier.size(16.dp),
-                        )
-                    }
-                }
-            }
+            PlaceCardContent(place = place, modifier = Modifier.weight(1f))
             IconButton(onClick = onDeleteClick) {
                 Icon(
                     imageVector = Icons.Rounded.Delete,
                     contentDescription = stringResource(R.string.place_card_delete),
                     tint = MaterialTheme.colorScheme.error,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlaceCardContent(
+    place: Place,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = place.name,
+            style = MaterialTheme.typography.titleLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            text = place.address,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Row(
+            modifier = Modifier.padding(top = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SuggestionChip(
+                onClick = {},
+                label = {
+                    Text(text = stringResource(place.category.toStringRes()))
+                },
+            )
+            if (place.isFavorite) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.Rounded.Favorite,
+                    contentDescription = null,
+                    tint = FavoriteRed,
+                    modifier = Modifier.size(16.dp),
                 )
             }
         }

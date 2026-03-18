@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -115,7 +116,7 @@ internal fun PlacesListContent(
 @Composable
 private fun PlacesListBody(
     uiState: PlacesListUiState,
-    listState: androidx.compose.foundation.lazy.LazyListState,
+    listState: LazyListState,
     onNavigateToDetail: (String) -> Unit,
     onNavigateToAdd: () -> Unit,
     onDeletePlace: (String) -> Unit,
@@ -187,7 +188,7 @@ private fun EmptyPlacesContent(
 @Composable
 private fun PlacesList(
     places: List<Place>,
-    listState: androidx.compose.foundation.lazy.LazyListState,
+    listState: LazyListState,
     onPlaceClick: (Place) -> Unit,
     onDeleteClick: (Place) -> Unit,
     modifier: Modifier = Modifier,

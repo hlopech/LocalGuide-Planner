@@ -14,7 +14,6 @@
     <string name="places_list_empty_title">Нет сохранённых мест</string>
     <string name="places_list_empty_action">Добавить первое место</string>
     <string name="places_list_fab_add">Добавить место</string>
-    <string name="places_list_fab_add_label">Добавить место</string>
     <string name="place_card_delete">Удалить</string>
     <string name="places_error_loading">Не удалось загрузить места</string>
     <!-- Place categories -->

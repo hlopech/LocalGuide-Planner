@@ -1,37 +1,46 @@
 package com.example.localguide_planner.ui.places.addedit
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,8 +48,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.localguide_planner.R
 import com.example.localguide_planner.domain.model.PlaceCategory
+import com.example.localguide_planner.ui.places.common.LocalGuideTextField
+import com.example.localguide_planner.ui.places.common.toIcon
 import com.example.localguide_planner.ui.places.common.toStringRes
 import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun AddEditPlaceScreen(
@@ -82,64 +94,46 @@ internal fun AddEditPlaceContent(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            AddEditPlaceTopBar(
-                isEditMode = uiState.isEditMode,
-                onNavigateBack = onNavigateBack,
+            TopAppBar(
+                title = {
+                    Text(
+                        if (uiState.isEditMode) {
+                            stringResource(R.string.add_edit_place_title_edit)
+                        } else {
+                            stringResource(R.string.add_edit_place_title_add)
+                        },
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null,
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior,
             )
         },
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
-            AddEditPlaceForm(
-                uiState = uiState,
-                onNameChange = onNameChange,
-                onAddressChange = onAddressChange,
-                onDescriptionChange = onDescriptionChange,
-                onCategoryChange = onCategoryChange,
-                onSaveClicked = onSaveClicked,
-            )
-            if (uiState.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
-        }
+        AddEditPlaceFormContent(
+            uiState = uiState,
+            onNameChange = onNameChange,
+            onAddressChange = onAddressChange,
+            onDescriptionChange = onDescriptionChange,
+            onCategoryChange = onCategoryChange,
+            onSaveClicked = onSaveClicked,
+            modifier = Modifier.padding(innerPadding),
+        )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AddEditPlaceTopBar(
-    isEditMode: Boolean,
-    onNavigateBack: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val title = if (isEditMode) {
-        stringResource(R.string.add_edit_place_title_edit)
-    } else {
-        stringResource(R.string.add_edit_place_title_add)
-    }
-    TopAppBar(
-        modifier = modifier,
-        title = { Text(text = title) },
-        navigationIcon = {
-            IconButton(onClick = onNavigateBack) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null,
-                )
-            }
-        },
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AddEditPlaceForm(
+private fun AddEditPlaceFormContent(
     uiState: AddEditPlaceUiState,
     onNameChange: (String) -> Unit,
     onAddressChange: (String) -> Unit,
@@ -148,102 +142,111 @@ private fun AddEditPlaceForm(
     onSaveClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 16.dp),
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { visible = true }
+
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        NameTextField(
-            name = uiState.name,
-            nameError = uiState.nameError,
-            onNameChange = onNameChange,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
-            value = uiState.address,
-            onValueChange = onAddressChange,
-            label = { Text(text = stringResource(R.string.add_edit_place_field_address)) },
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
-            value = uiState.description,
-            onValueChange = onDescriptionChange,
-            label = { Text(text = stringResource(R.string.add_edit_place_field_description)) },
-            minLines = 3,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        CategoryDropdown(
-            selectedCategory = uiState.category,
-            onCategoryChange = onCategoryChange,
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = onSaveClicked,
-            enabled = !uiState.isSaving,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(text = stringResource(R.string.add_edit_place_action_save))
+        item {
+            AnimatedFormField(index = 0, visible = visible) {
+                LocalGuideTextField(
+                    value = uiState.name,
+                    onValueChange = onNameChange,
+                    label = stringResource(R.string.add_edit_place_field_name),
+                    leadingIcon = Icons.Rounded.Edit,
+                    isError = uiState.nameError != null,
+                    errorMessage = uiState.nameError,
+                )
+            }
+        }
+        item {
+            AnimatedFormField(index = 1, visible = visible) {
+                LocalGuideTextField(
+                    value = uiState.address,
+                    onValueChange = onAddressChange,
+                    label = stringResource(R.string.add_edit_place_field_address),
+                    leadingIcon = Icons.Rounded.LocationOn,
+                )
+            }
+        }
+        item {
+            AnimatedFormField(index = 2, visible = visible) {
+                LocalGuideTextField(
+                    value = uiState.description,
+                    onValueChange = onDescriptionChange,
+                    label = stringResource(R.string.add_edit_place_label_description),
+                    leadingIcon = Icons.Rounded.Description,
+                    maxLines = 5,
+                )
+            }
+        }
+        item {
+            AnimatedFormField(index = 3, visible = visible) {
+                CategorySelector(
+                    selectedCategory = uiState.category,
+                    onCategorySelected = onCategoryChange,
+                )
+            }
+        }
+        item {
+            AnimatedFormField(index = 4, visible = visible) {
+                SaveButton(isSaving = uiState.isSaving, onClick = onSaveClicked)
+            }
         }
     }
 }
 
 @Composable
-private fun NameTextField(
-    name: String,
-    nameError: String?,
-    onNameChange: (String) -> Unit,
+private fun AnimatedFormField(
+    index: Int,
+    visible: Boolean,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-    OutlinedTextField(
-        value = name,
-        onValueChange = onNameChange,
-        label = { Text(text = stringResource(R.string.add_edit_place_field_name)) },
-        isError = nameError != null,
-        supportingText = if (nameError != null) {
-            { Text(text = stringResource(R.string.add_edit_place_error_name_empty)) }
-        } else {
-            null
-        },
-        modifier = modifier.fillMaxWidth(),
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CategoryDropdown(
-    selectedCategory: PlaceCategory,
-    onCategoryChange: (PlaceCategory) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
+    var itemVisible by remember { mutableStateOf(false) }
+    LaunchedEffect(visible) {
+        if (visible) {
+            delay(minOf(index * 80L, 400L))
+            itemVisible = true
+        }
+    }
+    AnimatedVisibility(
+        visible = itemVisible,
+        enter = fadeIn(tween(300)) + slideInVertically(tween(300)) { it / 3 },
         modifier = modifier,
     ) {
-        OutlinedTextField(
-            value = stringResource(selectedCategory.toStringRes()),
-            onValueChange = {},
-            readOnly = true,
-            label = { Text(text = stringResource(R.string.add_edit_place_field_category)) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+        content()
+    }
+}
+
+@Composable
+private fun CategorySelector(
+    selectedCategory: PlaceCategory,
+    onCategorySelected: (PlaceCategory) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(R.string.add_edit_place_field_category),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 8.dp),
         )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            PlaceCategory.entries.forEach { category ->
-                DropdownMenuItem(
-                    text = { Text(text = stringResource(category.toStringRes())) },
-                    onClick = {
-                        onCategoryChange(category)
-                        expanded = false
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(PlaceCategory.entries) { category ->
+                FilterChip(
+                    selected = category == selectedCategory,
+                    onClick = { onCategorySelected(category) },
+                    label = { Text(stringResource(category.toStringRes())) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = category.toIcon(),
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
                     },
                 )
             }
@@ -251,9 +254,41 @@ private fun CategoryDropdown(
     }
 }
 
+@Composable
+private fun SaveButton(
+    isSaving: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        onClick = onClick,
+        enabled = !isSaving,
+        shape = MaterialTheme.shapes.extraLarge,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        AnimatedContent(
+            targetState = isSaving,
+            transitionSpec = {
+                fadeIn(tween(200)) togetherWith fadeOut(tween(200))
+            },
+            label = "SaveButtonContent",
+        ) { saving ->
+            if (saving) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
+            } else {
+                Text(stringResource(R.string.add_edit_place_action_save))
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true, name = "AddEditPlaceScreen — Add mode")
 @Composable
-fun AddEditPlaceScreenAddPreview() {
+private fun AddEditPlaceScreenAddPreview() {
     LocalGuidePlannerTheme {
         AddEditPlaceContent(
             uiState = AddEditPlaceUiState(),
@@ -269,7 +304,7 @@ fun AddEditPlaceScreenAddPreview() {
 
 @Preview(showBackground = true, name = "AddEditPlaceScreen — Edit mode")
 @Composable
-fun AddEditPlaceScreenEditPreview() {
+private fun AddEditPlaceScreenEditPreview() {
     LocalGuidePlannerTheme {
         AddEditPlaceContent(
             uiState = AddEditPlaceUiState(
@@ -279,6 +314,22 @@ fun AddEditPlaceScreenEditPreview() {
                 category = PlaceCategory.PARK,
                 isEditMode = true,
             ),
+            onNameChange = {},
+            onAddressChange = {},
+            onDescriptionChange = {},
+            onCategoryChange = {},
+            onSaveClicked = {},
+            onNavigateBack = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "AddEditPlaceScreen — isSaving")
+@Composable
+private fun AddEditPlaceScreenSavingPreview() {
+    LocalGuidePlannerTheme {
+        AddEditPlaceContent(
+            uiState = AddEditPlaceUiState(name = "Парк", isSaving = true),
             onNameChange = {},
             onAddressChange = {},
             onDescriptionChange = {},

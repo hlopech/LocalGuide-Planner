@@ -47,6 +47,7 @@
     <string name="add_edit_place_field_category">Категория</string>
     <string name="add_edit_place_action_save">Сохранить</string>
     <string name="add_edit_place_error_name_empty">Введите название места</string>
+    <string name="add_edit_place_label_description">Описание (необязательно)</string>
     <!-- Placeholders (Sprint 1 — will be replaced in future tasks) -->
     <string name="placeholder_onboarding">Экран онбординга</string>
     <string name="placeholder_place_detail">Детали места</string>

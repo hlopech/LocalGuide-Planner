@@ -241,7 +241,7 @@ AnimatedFormField(index, content)  // private wrapper с LaunchedEffect + Animat
 **Статус:** review
 
 **Ветка:** feature/TASK-013-add-edit-place-ui
-**PR:** (заполняет Developer)
+**PR:** https://github.com/hlopech/LocalGuide-Planner/pull/14
 **QA вердикт:** pending
 **Мерж:** (заполняет Orchestrator)
 

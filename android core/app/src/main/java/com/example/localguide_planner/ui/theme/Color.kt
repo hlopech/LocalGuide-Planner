@@ -91,6 +91,10 @@ val GradientHeroEnd = Color(0xFFC0410D)
 val GradientOverlayTransparent = Color(0x00000000)
 val GradientOverlaySemiDark = Color(0x99000000)
 
+// ---- Semantic colours ----
+
+val FavoriteRed = Color(0xFFE53935)
+
 // ---- Category accent colours ----
 
 val CategoryRestaurant = Color(0xFFD32F2F)

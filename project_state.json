@@ -1,7 +1,7 @@
 {
   "project": "LocalGuide Planner",
-  "version": "0.1.0",
-  "last_updated": "2026-03-14",
+  "version": "0.2.0",
+  "last_updated": "2026-03-21",
   "owner": "Orchestrator",
 
   "product": {
@@ -20,18 +20,18 @@
   },
 
   "sprint": {
-    "id": 1,
-    "name": "Sprint 1 — Foundation",
-    "status": "in_progress",
-    "goal": "Онбординг + навигация + Places (список, детали, добавление)",
-    "started": "2026-03-14",
-    "deadline": null
+    "id": 2,
+    "name": "Sprint 2 — UI Redesign",
+    "status": "done",
+    "goal": "Редизайн всего UI: дизайн-система, анимированный онбординг, список мест, детали места, форма добавления/редактирования",
+    "started": "2026-03-15",
+    "completed": "2026-03-21"
   },
 
   "current_focus": {
-    "agent": "qa_tester",
-    "action": "qa_review_TASK-004",
-    "context": "TASK-005 merged into develop. TASK-004 fixed BUG-009 (runCatching + tests + strings), rebased on develop. PR #5 awaits QA re-review."
+    "agent": "orchestrator",
+    "action": "sprint_2_complete",
+    "context": "Sprint 2 завершён. TASK-009—013 все смержены в develop. Sprint 3 TBD."
   },
 
   "tasks": [
@@ -41,7 +41,6 @@
       "type": "chore",
       "priority": "Critical",
       "status": "done",
-      "assigned_to": null,
       "sprint": "SPRINT-1",
       "branch": "feature/TASK-001-setup-dependencies",
       "pr": "#1",
@@ -56,7 +55,6 @@
       "type": "feature",
       "priority": "Critical",
       "status": "done",
-      "assigned_to": null,
       "sprint": "SPRINT-1",
       "branch": "feature/TASK-002-domain-layer",
       "pr": "#2",
@@ -71,7 +69,6 @@
       "type": "feature",
       "priority": "Critical",
       "status": "done",
-      "assigned_to": null,
       "sprint": "SPRINT-1",
       "branch": "feature/TASK-003-data-layer",
       "pr": "#3",
@@ -86,7 +83,6 @@
       "type": "feature",
       "priority": "Medium",
       "status": "todo",
-      "assigned_to": null,
       "sprint": "SPRINT-1",
       "branch": null,
       "pr": null,
@@ -100,16 +96,14 @@
       "title": "Онбординг — OnboardingScreen + OnboardingViewModel",
       "type": "feature",
       "priority": "Critical",
-      "status": "review",
-      "assigned_to": null,
+      "status": "done",
       "sprint": "SPRINT-1",
       "branch": "feature/TASK-004-onboarding",
       "pr": "#5",
-      "qa_verdict": "pending",
-      "merged": false,
-      "notes": "BUG-009 fixed (runCatching), strings aligned with spec, 3 new tests added. Rebased on develop. Awaiting QA re-review.",
+      "qa_verdict": "PASS",
+      "merged": true,
       "created_at": "2026-03-14",
-      "updated_at": "2026-03-14"
+      "updated_at": "2026-03-15"
     },
     {
       "id": "TASK-005",
@@ -117,7 +111,6 @@
       "type": "feature",
       "priority": "Critical",
       "status": "done",
-      "assigned_to": null,
       "sprint": "SPRINT-1",
       "branch": "feature/TASK-005-navigation",
       "pr": "#4",
@@ -131,134 +124,172 @@
       "title": "PlacesListScreen — список мест + PlaceCard + PlacesListViewModel",
       "type": "feature",
       "priority": "High",
-      "status": "todo",
-      "assigned_to": null,
+      "status": "done",
       "sprint": "SPRINT-1",
-      "branch": null,
-      "pr": null,
-      "qa_verdict": null,
-      "merged": false,
-      "blocked_by": ["TASK-005"],
+      "branch": "feature/TASK-006-places-list",
+      "pr": "#6",
+      "qa_verdict": "PASS",
+      "merged": true,
       "created_at": "2026-03-14",
-      "updated_at": "2026-03-14"
+      "updated_at": "2026-03-15"
     },
     {
       "id": "TASK-007",
       "title": "PlaceDetailScreen — детали места + PlaceDetailViewModel",
       "type": "feature",
       "priority": "High",
-      "status": "todo",
-      "assigned_to": null,
+      "status": "done",
       "sprint": "SPRINT-1",
-      "branch": null,
-      "pr": null,
-      "qa_verdict": null,
-      "merged": false,
-      "blocked_by": ["TASK-005", "TASK-006"],
+      "branch": "feature/TASK-007-place-detail",
+      "pr": "#7",
+      "qa_verdict": "PASS",
+      "merged": true,
       "created_at": "2026-03-14",
-      "updated_at": "2026-03-14"
+      "updated_at": "2026-03-15"
     },
     {
       "id": "TASK-008",
       "title": "AddEditPlaceScreen — форма добавления/редактирования + AddEditPlaceViewModel",
       "type": "feature",
       "priority": "High",
-      "status": "todo",
-      "assigned_to": null,
+      "status": "done",
       "sprint": "SPRINT-1",
-      "branch": null,
-      "pr": null,
-      "qa_verdict": null,
-      "merged": false,
-      "blocked_by": ["TASK-005", "TASK-006"],
+      "branch": "feature/TASK-008-add-edit-place",
+      "pr": "#9",
+      "qa_verdict": "PASS",
+      "merged": true,
       "created_at": "2026-03-14",
-      "updated_at": "2026-03-14"
+      "updated_at": "2026-03-15"
+    },
+    {
+      "id": "TASK-009",
+      "title": "Дизайн-система — Material3 seed #E8622A, Typography, Shapes, LocalGuideDesignTokens",
+      "type": "refactor",
+      "priority": "Critical",
+      "status": "done",
+      "sprint": "SPRINT-2",
+      "branch": "feature/TASK-009-design-system",
+      "pr": "#11",
+      "qa_verdict": "PASS",
+      "merged": true,
+      "created_at": "2026-03-15",
+      "updated_at": "2026-03-18"
+    },
+    {
+      "id": "TASK-010",
+      "title": "Онбординг — анимированный hero-экран с современным UI",
+      "type": "refactor",
+      "priority": "High",
+      "status": "done",
+      "sprint": "SPRINT-2",
+      "branch": "feature/TASK-010-onboarding-ui",
+      "pr": "#12",
+      "qa_verdict": "PASS",
+      "merged": true,
+      "created_at": "2026-03-15",
+      "updated_at": "2026-03-20"
+    },
+    {
+      "id": "TASK-011",
+      "title": "Список мест — PlaceCard с тенями, staggered-анимация, animated TopBar, extended FAB",
+      "type": "refactor",
+      "priority": "High",
+      "status": "done",
+      "sprint": "SPRINT-2",
+      "branch": "feature/TASK-011-places-list-ui",
+      "pr": "#13",
+      "qa_verdict": "PASS",
+      "merged": true,
+      "created_at": "2026-03-15",
+      "updated_at": "2026-03-20"
+    },
+    {
+      "id": "TASK-012",
+      "title": "PlaceDetailScreen — hero-секция с градиентом категории, LargeTopAppBar, анимированные секции",
+      "type": "refactor",
+      "priority": "High",
+      "status": "done",
+      "sprint": "SPRINT-2",
+      "branch": "feature/TASK-012-place-detail-ui",
+      "pr": "#15",
+      "qa_verdict": "PASS",
+      "merged": true,
+      "created_at": "2026-03-20",
+      "updated_at": "2026-03-21",
+      "bugs_fixed": ["BUG-010", "BUG-011", "BUG-012"]
+    },
+    {
+      "id": "TASK-013",
+      "title": "AddEditPlaceScreen — LocalGuideTextField, AnimatedContent для кнопки, staggered анимация",
+      "type": "refactor",
+      "priority": "High",
+      "status": "done",
+      "sprint": "SPRINT-2",
+      "branch": "feature/TASK-013-add-edit-place-ui",
+      "pr": "#14",
+      "qa_verdict": "PASS",
+      "merged": true,
+      "created_at": "2026-03-20",
+      "updated_at": "2026-03-21",
+      "bugs_noted": ["BUG-029", "BUG-030"]
     }
   ],
 
   "bugs": [
-    {
-      "id": "BUG-001",
-      "title": "room-testing в неверном gradle scope",
-      "status": "closed",
-      "related_task": "TASK-003",
-      "closed_at": "2026-03-14"
-    },
-    {
-      "id": "BUG-002",
-      "title": "PlacesRepositoryImplTest использует MockK вместо in-memory Room",
-      "status": "closed",
-      "related_task": "TASK-003",
-      "closed_at": "2026-03-14",
-      "resolution": "Tech Director: MockK принят как правильный подход для repository unit-тестов. DAO-тесты вынесены в TASK-003b"
-    },
-    {
-      "id": "BUG-003",
-      "title": "Onboarding строки отсутствуют в strings.xml на ветке TASK-004",
-      "status": "closed",
-      "related_task": "TASK-004",
-      "closed_at": "2026-03-14"
-    },
-    {
-      "id": "BUG-004",
-      "title": "Turbine dependency отсутствует в libs.versions.toml",
-      "status": "closed",
-      "related_task": "TASK-004",
-      "closed_at": "2026-03-14"
-    },
-    {
-      "id": "BUG-005",
-      "title": "AppNavGraph.kt: Unresolved reference 'OnboardingScreen'",
-      "status": "closed",
-      "related_task": "TASK-005",
-      "closed_at": "2026-03-14"
-    },
-    {
-      "id": "BUG-006",
-      "title": "4 hardcoded placeholder строки в AppNavGraph.kt и MainScreen.kt",
-      "status": "closed",
-      "related_task": "TASK-005",
-      "closed_at": "2026-03-14"
-    },
-    {
-      "id": "BUG-007",
-      "title": "AppNavGraph.kt: удалён механизм навигации onOnboardingCompleted + popUpTo",
-      "status": "closed",
-      "related_task": "TASK-005",
-      "closed_at": "2026-03-14"
-    },
-    {
-      "id": "BUG-009",
-      "title": "OnboardingViewModel: нет try/catch — isLoading зависает, возможен крэш",
-      "status": "fixed",
-      "related_task": "TASK-004",
-      "fixed_at": "2026-03-14",
-      "notes": "Исправлено: runCatching, 3 новых теста, строки выравнены. Ожидает QA финального review."
-    }
+    { "id": "BUG-001", "title": "room-testing в неверном gradle scope", "status": "closed", "related_task": "TASK-003", "closed_at": "2026-03-14" },
+    { "id": "BUG-002", "title": "PlacesRepositoryImplTest использует MockK вместо in-memory Room", "status": "closed", "related_task": "TASK-003", "closed_at": "2026-03-14" },
+    { "id": "BUG-003", "title": "Onboarding строки отсутствуют в strings.xml", "status": "closed", "related_task": "TASK-004", "closed_at": "2026-03-14" },
+    { "id": "BUG-004", "title": "Turbine dependency отсутствует в libs.versions.toml", "status": "closed", "related_task": "TASK-004", "closed_at": "2026-03-14" },
+    { "id": "BUG-005", "title": "AppNavGraph.kt: Unresolved reference OnboardingScreen", "status": "closed", "related_task": "TASK-005", "closed_at": "2026-03-14" },
+    { "id": "BUG-006", "title": "4 hardcoded placeholder строки", "status": "closed", "related_task": "TASK-005", "closed_at": "2026-03-14" },
+    { "id": "BUG-007", "title": "AppNavGraph.kt: удалён механизм навигации onOnboardingCompleted", "status": "closed", "related_task": "TASK-005", "closed_at": "2026-03-14" },
+    { "id": "BUG-009", "title": "OnboardingViewModel: нет try/catch — isLoading зависает", "status": "closed", "related_task": "TASK-004", "closed_at": "2026-03-15" },
+    { "id": "BUG-010", "title": "PlaceDetailScreen: кнопка «Повторить» вызывала onNavigateBack вместо reload", "status": "closed", "related_task": "TASK-012", "closed_at": "2026-03-21" },
+    { "id": "BUG-011", "title": "PlaceDetailScreen: функции PlaceDetailContent и SectionsColumn > 50 строк", "status": "closed", "related_task": "TASK-012", "closed_at": "2026-03-21" },
+    { "id": "BUG-012", "title": "strings.xml: неиспользуемые строки place_detail_favorite_add/remove", "status": "closed", "related_task": "TASK-012", "closed_at": "2026-03-21" },
+    { "id": "BUG-019", "title": "AppNavGraph.kt: placeholder текст вместо OnboardingScreen", "status": "closed", "related_task": "TASK-005", "closed_at": "2026-03-15" },
+    { "id": "BUG-020", "title": "LocalGuideDesignTokens: hardcoded inline hex-цвета", "status": "closed", "related_task": "TASK-009", "closed_at": "2026-03-15" },
+    { "id": "BUG-021", "title": "OnboardingScreen: Color.White hardcoded в 3 местах", "status": "closed", "related_task": "TASK-010", "closed_at": "2026-03-18" },
+    { "id": "BUG-022", "title": "OnboardingFormSection превышала 50 строк", "status": "closed", "related_task": "TASK-010", "closed_at": "2026-03-18" },
+    { "id": "BUG-023", "title": "OnboardingScreen: неверный padding API", "status": "closed", "related_task": "TASK-010", "closed_at": "2026-03-18" },
+    { "id": "BUG-024", "title": "PlaceCard превышала 68 строк", "status": "closed", "related_task": "TASK-011", "closed_at": "2026-03-20" },
+    { "id": "BUG-025", "title": "PlaceCard: Color(0xFFE53935) hardcoded inline", "status": "closed", "related_task": "TASK-011", "closed_at": "2026-03-20" },
+    { "id": "BUG-026", "title": "PlacesListScreen: LazyListState как FQDN без импорта", "status": "closed", "related_task": "TASK-011", "closed_at": "2026-03-20" },
+    { "id": "BUG-027", "title": "strings.xml: дублирующая строка places_list_fab_add_label", "status": "closed", "related_task": "TASK-011", "closed_at": "2026-03-20" },
+    { "id": "BUG-028", "title": "OnboardingScreen: padding(horizontal+top) — неверный API Compose", "status": "closed", "related_task": "TASK-010", "closed_at": "2026-03-20" },
+    { "id": "BUG-029", "title": "AddEditPlaceFormContent превышала 65 строк (non-blocking)", "status": "open", "related_task": "TASK-013", "notes": "QA дал PASS. Можно исправить в Sprint 3." },
+    { "id": "BUG-030", "title": "AddEditPlaceScreen: Icons.Rounded.Edit вместо Icons.Rounded.Label для поля названия", "status": "open", "related_task": "TASK-013", "notes": "Low severity. Sprint 3." },
+    { "id": "BUG-031", "title": "TASK-013 QA: FavoriteRed в PlaceDetailScreen (ложное срабатывание)", "status": "closed", "related_task": "TASK-012", "closed_at": "2026-03-21", "resolution": "private val FavoriteRed — допустимо по архитектурным правилам" }
   ],
 
   "git": {
     "main_branch": "main",
     "dev_branch": "develop",
-    "active_branches": ["feature/TASK-004-onboarding"],
+    "active_branches": [],
     "merged_branches": [
       "feature/TASK-001-setup-dependencies",
       "feature/TASK-002-domain-layer",
       "feature/TASK-003-data-layer",
-      "feature/TASK-005-navigation"
+      "feature/TASK-004-onboarding",
+      "feature/TASK-005-navigation",
+      "feature/TASK-006-places-list",
+      "feature/TASK-007-place-detail",
+      "feature/TASK-008-add-edit-place",
+      "feature/TASK-009-design-system",
+      "feature/TASK-010-onboarding-ui",
+      "feature/TASK-011-places-list-ui",
+      "feature/TASK-012-place-detail-ui",
+      "feature/TASK-013-add-edit-place-ui"
     ],
-    "open_prs": [
-      {"number": 5, "title": "[TASK-004] OnboardingScreen", "branch": "feature/TASK-004-onboarding", "status": "open"}
-    ]
+    "open_prs": []
   },
 
   "stats": {
-    "tasks_total": 9,
-    "tasks_done": 4,
-    "tasks_in_progress": 1,
-    "tasks_todo": 4,
-    "bugs_open": 0,
-    "bugs_fixed_pending_qa": 1,
-    "bugs_closed": 7
+    "tasks_total": 14,
+    "tasks_done": 13,
+    "tasks_todo": 1,
+    "bugs_open": 2,
+    "bugs_closed": 21,
+    "sprints_completed": 2
   }
 }

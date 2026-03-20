@@ -210,7 +210,7 @@ AnimatedDetailSection(index, ...)             // private, добавляет sta
 **Статус:** review
 
 **Ветка:** feature/TASK-012-place-detail-ui
-**PR:** (заполняет Developer)
+**PR:** https://github.com/hlopech/LocalGuide-Planner/pull/15
 **QA вердикт:** pending
 **Мерж:** (заполняет Orchestrator)
 

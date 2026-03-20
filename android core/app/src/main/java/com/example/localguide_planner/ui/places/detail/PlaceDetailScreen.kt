@@ -45,6 +45,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -99,6 +100,7 @@ fun PlaceDetailScreen(
         onDeleteConfirmed = { viewModel.onDeleteClicked() },
         onToggleFavorite = { viewModel.onToggleFavorite() },
         onEditClicked = { viewModel.onEditClicked() },
+        onRetryLoad = { viewModel.loadPlace() },
         modifier = modifier,
     )
 }
@@ -111,6 +113,7 @@ internal fun PlaceDetailContent(
     onDeleteConfirmed: () -> Unit,
     onToggleFavorite: () -> Unit,
     onEditClicked: () -> Unit,
+    onRetryLoad: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -119,51 +122,83 @@ internal fun PlaceDetailContent(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            LargeTopAppBar(
-                title = { Text(placeName) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = null,
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = onEditClicked) {
-                        Icon(
-                            imageVector = Icons.Rounded.Edit,
-                            contentDescription = stringResource(R.string.place_detail_edit),
-                        )
-                    }
-                },
+            PlaceDetailTopBar(
+                placeName = placeName,
                 scrollBehavior = scrollBehavior,
-                colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                ),
+                onNavigateBack = onNavigateBack,
+                onEditClicked = onEditClicked,
             )
         },
     ) { innerPadding ->
-        Crossfade(
-            targetState = uiState,
+        PlaceDetailStateContent(
+            uiState = uiState,
+            onNavigateBack = onNavigateBack,
+            onDeleteConfirmed = onDeleteConfirmed,
+            onToggleFavorite = onToggleFavorite,
+            onRetryLoad = onRetryLoad,
             modifier = Modifier.padding(innerPadding),
-        ) { state ->
-            when (state) {
-                is PlaceDetailUiState.Loading -> PlaceDetailLoadingContent()
-                is PlaceDetailUiState.Error -> PlaceDetailErrorContent(
-                    message = state.message.ifEmpty {
-                        stringResource(R.string.place_detail_not_found)
-                    },
-                    onRetry = onNavigateBack,
-                    onNavigateBack = onNavigateBack,
-                )
-                is PlaceDetailUiState.Success -> PlaceDetailSuccessContent(
-                    place = state.place,
-                    onDeleteConfirmed = onDeleteConfirmed,
-                    onToggleFavorite = onToggleFavorite,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PlaceDetailTopBar(
+    placeName: String,
+    scrollBehavior: TopAppBarScrollBehavior,
+    onNavigateBack: () -> Unit,
+    onEditClicked: () -> Unit,
+) {
+    LargeTopAppBar(
+        title = { Text(placeName) },
+        navigationIcon = {
+            IconButton(onClick = onNavigateBack) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                    contentDescription = null,
                 )
             }
+        },
+        actions = {
+            IconButton(onClick = onEditClicked) {
+                Icon(
+                    imageVector = Icons.Rounded.Edit,
+                    contentDescription = stringResource(R.string.place_detail_edit),
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+        ),
+    )
+}
+
+@Composable
+private fun PlaceDetailStateContent(
+    uiState: PlaceDetailUiState,
+    onNavigateBack: () -> Unit,
+    onDeleteConfirmed: () -> Unit,
+    onToggleFavorite: () -> Unit,
+    onRetryLoad: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Crossfade(targetState = uiState, modifier = modifier) { state ->
+        when (state) {
+            is PlaceDetailUiState.Loading -> PlaceDetailLoadingContent()
+            is PlaceDetailUiState.Error -> PlaceDetailErrorContent(
+                message = state.message.ifEmpty {
+                    stringResource(R.string.place_detail_not_found)
+                },
+                onRetry = onRetryLoad,
+                onNavigateBack = onNavigateBack,
+            )
+            is PlaceDetailUiState.Success -> PlaceDetailSuccessContent(
+                place = state.place,
+                onDeleteConfirmed = onDeleteConfirmed,
+                onToggleFavorite = onToggleFavorite,
+            )
         }
     }
 }
@@ -313,7 +348,21 @@ private fun PlaceDetailSectionsColumn(
             onDismiss = { showDeleteDialog = false },
         )
     }
+    PlaceDetailSectionsList(
+        place = place,
+        onToggleFavorite = onToggleFavorite,
+        onDeleteClicked = { showDeleteDialog = true },
+        modifier = modifier,
+    )
+}
 
+@Composable
+private fun PlaceDetailSectionsList(
+    place: Place,
+    onToggleFavorite: () -> Unit,
+    onDeleteClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     var sectionIndex = 0
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         AnimatedDetailSection(
@@ -346,13 +395,32 @@ private fun PlaceDetailSectionsColumn(
             label = stringResource(R.string.place_detail_label_added),
             value = dateStr,
         )
-        AnimatedFavoriteButton(
-            index = sectionIndex++,
+        PlaceDetailActionButtons(
             isFavorite = place.isFavorite,
+            onToggleFavorite = onToggleFavorite,
+            onDeleteClicked = onDeleteClicked,
+            sectionIndex = sectionIndex,
+        )
+    }
+}
+
+@Composable
+private fun PlaceDetailActionButtons(
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit,
+    onDeleteClicked: () -> Unit,
+    sectionIndex: Int,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        AnimatedFavoriteButton(
+            index = sectionIndex,
+            isFavorite = isFavorite,
             onClick = onToggleFavorite,
         )
+        Spacer(Modifier.height(4.dp))
         OutlinedButton(
-            onClick = { showDeleteDialog = true },
+            onClick = onDeleteClicked,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp),
@@ -514,6 +582,7 @@ fun PlaceDetailScreenSuccessPreview() {
             onDeleteConfirmed = {},
             onToggleFavorite = {},
             onEditClicked = {},
+            onRetryLoad = {},
         )
     }
 }
@@ -528,6 +597,7 @@ fun PlaceDetailScreenLoadingPreview() {
             onDeleteConfirmed = {},
             onToggleFavorite = {},
             onEditClicked = {},
+            onRetryLoad = {},
         )
     }
 }
@@ -542,6 +612,7 @@ fun PlaceDetailScreenErrorPreview() {
             onDeleteConfirmed = {},
             onToggleFavorite = {},
             onEditClicked = {},
+            onRetryLoad = {},
         )
     }
 }

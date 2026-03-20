@@ -37,7 +37,7 @@ class PlaceDetailViewModel @Inject constructor(
         loadPlace()
     }
 
-    private fun loadPlace() {
+    fun loadPlace() {
         viewModelScope.launch {
             val place = getPlaceByIdUseCase(placeId)
             _uiState.value = if (place != null) {

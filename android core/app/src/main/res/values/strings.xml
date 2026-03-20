@@ -29,8 +29,6 @@
     <string name="place_detail_delete">Удалить место</string>
     <string name="place_detail_delete_confirm_title">Удалить место?</string>
     <string name="place_detail_delete_confirm_message">Это действие нельзя отменить.</string>
-    <string name="place_detail_favorite_add">Добавить в избранное</string>
-    <string name="place_detail_favorite_remove">Убрать из избранного</string>
     <string name="place_detail_section_category">Категория</string>
     <string name="place_detail_section_address">Адрес</string>
     <string name="place_detail_section_description">Описание</string>

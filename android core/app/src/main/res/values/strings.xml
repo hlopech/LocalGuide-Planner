@@ -35,6 +35,10 @@
     <string name="place_detail_section_address">Адрес</string>
     <string name="place_detail_section_description">Описание</string>
     <string name="place_detail_not_found">Место не найдено</string>
+    <string name="place_detail_label_added">Дата добавления</string>
+    <string name="place_detail_action_add_favorite">В избранное</string>
+    <string name="place_detail_action_remove_favorite">Убрать из избранного</string>
+    <string name="place_detail_error_retry">Повторить</string>
     <string name="dialog_confirm">Подтвердить</string>
     <string name="dialog_cancel">Отмена</string>
     <string name="action_go_back">Назад</string>

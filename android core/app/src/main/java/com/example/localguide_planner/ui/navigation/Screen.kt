@@ -4,6 +4,7 @@ sealed class Screen(val route: String) {
     data object Onboarding : Screen("onboarding")
     data object Main : Screen("main")
     data object PlacesList : Screen("places/list")
+    data object Profile : Screen("profile")
 
     data class PlaceDetail(val placeId: String = "{placeId}") :
         Screen("places/detail/$placeId") {

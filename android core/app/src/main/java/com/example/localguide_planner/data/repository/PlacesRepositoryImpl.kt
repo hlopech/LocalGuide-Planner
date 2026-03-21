@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PlacesRepositoryImpl @Inject constructor(
-    private val dao: PlaceDao
+    private val dao: PlaceDao,
 ) : PlacesRepository {
 
     override fun getPlaces(): Flow<List<Place>> =
@@ -23,4 +23,7 @@ class PlacesRepositoryImpl @Inject constructor(
 
     override suspend fun deletePlace(id: String) =
         dao.deletePlaceById(id)
+
+    override suspend fun deleteAllPlaces() =
+        dao.deleteAllPlaces()
 }

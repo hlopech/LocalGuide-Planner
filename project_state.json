@@ -1,6 +1,6 @@
 {
   "project": "LocalGuide Planner",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "last_updated": "2026-03-21",
   "owner": "Orchestrator",
 
@@ -9,7 +9,7 @@
     "architecture": "docs/arch/README.md",
     "data_strategy": "offline-first, Room + DataStore, future online",
     "auth_strategy": "local profile (DataStore), future Firebase Auth",
-    "maps_provider": "TBD by Tech Director"
+    "maps_provider": "OSMDroid (TASK-017)"
   },
 
   "team": {
@@ -20,18 +20,18 @@
   },
 
   "sprint": {
-    "id": 2,
-    "name": "Sprint 2 — UI Redesign",
-    "status": "done",
-    "goal": "Редизайн всего UI: дизайн-система, анимированный онбординг, список мест, детали места, форма добавления/редактирования",
-    "started": "2026-03-15",
-    "completed": "2026-03-21"
+    "id": 3,
+    "name": "Sprint 3 — New Features",
+    "status": "in_progress",
+    "goal": "Новые фичи: поиск/фильтры, экран профиля, вкладка избранного, карта OSMDroid",
+    "started": "2026-03-21",
+    "completed": null
   },
 
   "current_focus": {
     "agent": "orchestrator",
-    "action": "sprint_2_complete",
-    "context": "Sprint 2 завершён. TASK-009—013 все смержены в develop. Sprint 3 TBD."
+    "action": "task_016_development",
+    "context": "TASK-015 (ProfileScreen) смержена PR #17 — PASS. Запускаем TASK-016 (Favorites tab)."
   },
 
   "tasks": [
@@ -232,6 +232,65 @@
       "created_at": "2026-03-20",
       "updated_at": "2026-03-21",
       "bugs_noted": ["BUG-029", "BUG-030"]
+    },
+    {
+      "id": "TASK-014",
+      "title": "Поиск и фильтры — SearchBar + FilterChip по категориям в PlacesListScreen",
+      "type": "feature",
+      "priority": "High",
+      "status": "done",
+      "sprint": "SPRINT-3",
+      "branch": "feature/TASK-014-search-and-filters",
+      "pr": "#16",
+      "qa_verdict": "PASS",
+      "merged": true,
+      "created_at": "2026-03-21",
+      "updated_at": "2026-03-21",
+      "bugs_noted": ["BUG-032", "BUG-033", "BUG-034"]
+    },
+    {
+      "id": "TASK-015",
+      "title": "Экран профиля пользователя — ProfileScreen, hero, статистика, DeleteAllPlacesUseCase",
+      "type": "feature",
+      "priority": "High",
+      "status": "done",
+      "sprint": "SPRINT-3",
+      "branch": "feature/TASK-015-profile-screen",
+      "pr": "#17",
+      "qa_verdict": "PASS",
+      "merged": true,
+      "created_at": "2026-03-21",
+      "updated_at": "2026-03-21",
+      "bugs_fixed": ["BUG-035", "BUG-036"],
+      "bugs_noted": ["BUG-037"]
+    },
+    {
+      "id": "TASK-016",
+      "title": "Вкладка «Избранное» — FavoritesScreen, FavoritesViewModel, третья вкладка BottomNavBar",
+      "type": "feature",
+      "priority": "High",
+      "status": "in_progress",
+      "sprint": "SPRINT-3",
+      "branch": "feature/TASK-016-favorites-tab",
+      "pr": null,
+      "qa_verdict": null,
+      "merged": false,
+      "created_at": "2026-03-21",
+      "updated_at": "2026-03-21"
+    },
+    {
+      "id": "TASK-017",
+      "title": "Карта мест — OSMDroid интеграция, четвёртая вкладка BottomNavBar",
+      "type": "feature",
+      "priority": "High",
+      "status": "todo",
+      "sprint": "SPRINT-3",
+      "branch": null,
+      "pr": null,
+      "qa_verdict": null,
+      "merged": false,
+      "created_at": "2026-03-21",
+      "updated_at": "2026-03-21"
     }
   ],
 
@@ -259,13 +318,19 @@
     { "id": "BUG-028", "title": "OnboardingScreen: padding(horizontal+top) — неверный API Compose", "status": "closed", "related_task": "TASK-010", "closed_at": "2026-03-20" },
     { "id": "BUG-029", "title": "AddEditPlaceFormContent превышала 65 строк (non-blocking)", "status": "open", "related_task": "TASK-013", "notes": "QA дал PASS. Можно исправить в Sprint 3." },
     { "id": "BUG-030", "title": "AddEditPlaceScreen: Icons.Rounded.Edit вместо Icons.Rounded.Label для поля названия", "status": "open", "related_task": "TASK-013", "notes": "Low severity. Sprint 3." },
-    { "id": "BUG-031", "title": "TASK-013 QA: FavoriteRed в PlaceDetailScreen (ложное срабатывание)", "status": "closed", "related_task": "TASK-012", "closed_at": "2026-03-21", "resolution": "private val FavoriteRed — допустимо по архитектурным правилам" }
+    { "id": "BUG-031", "title": "TASK-013 QA: FavoriteRed в PlaceDetailScreen (ложное срабатывание)", "status": "closed", "related_task": "TASK-012", "closed_at": "2026-03-21", "resolution": "private val FavoriteRed — допустимо по архитектурным правилам" },
+    { "id": "BUG-032", "title": "PlacesListScreen: SearchBar теряет фокус при повторном тапе (deprecated API)", "status": "open", "related_task": "TASK-014", "notes": "Medium. Non-blocking, исправить в следующем спринте." },
+    { "id": "BUG-033", "title": "PlacesListScreen: использует deprecated SearchBar API", "status": "open", "related_task": "TASK-014", "notes": "Medium. Non-blocking." },
+    { "id": "BUG-034", "title": "PlacesListContent превышает 51 строку", "status": "open", "related_task": "TASK-014", "notes": "Low severity. Non-blocking." },
+    { "id": "BUG-035", "title": "ProfileScreen: hardcoded строка \"—\" в ProfileHeroSection", "status": "closed", "related_task": "TASK-015", "closed_at": "2026-03-21" },
+    { "id": "BUG-036", "title": "MainScreen функция превышает 50 строк (76 строк) после добавления Profile tab", "status": "closed", "related_task": "TASK-015", "closed_at": "2026-03-21" },
+    { "id": "BUG-037", "title": "ProfileViewModel: side effect _latestProfile.value = profile внутри combine лямбды", "status": "open", "related_task": "TASK-015", "notes": "Low severity. Архитектурный запах, не блокирует." }
   ],
 
   "git": {
     "main_branch": "main",
     "dev_branch": "develop",
-    "active_branches": [],
+    "active_branches": ["feature/TASK-016-favorites-tab"],
     "merged_branches": [
       "feature/TASK-001-setup-dependencies",
       "feature/TASK-002-domain-layer",
@@ -279,17 +344,20 @@
       "feature/TASK-010-onboarding-ui",
       "feature/TASK-011-places-list-ui",
       "feature/TASK-012-place-detail-ui",
-      "feature/TASK-013-add-edit-place-ui"
+      "feature/TASK-013-add-edit-place-ui",
+      "feature/TASK-014-search-and-filters",
+      "feature/TASK-015-profile-screen"
     ],
     "open_prs": []
   },
 
   "stats": {
-    "tasks_total": 14,
-    "tasks_done": 13,
-    "tasks_todo": 1,
-    "bugs_open": 2,
-    "bugs_closed": 21,
+    "tasks_total": 18,
+    "tasks_done": 15,
+    "tasks_in_progress": 1,
+    "tasks_todo": 2,
+    "bugs_open": 6,
+    "bugs_closed": 22,
     "sprints_completed": 2
   }
 }

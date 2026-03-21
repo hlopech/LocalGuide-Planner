@@ -15,6 +15,8 @@ sealed class Screen(val route: String) {
         }
     }
 
+    data object Map : Screen("places/map")
+
     data object AddPlace : Screen("places/add")
 
     data class EditPlace(val placeId: String = "{placeId}") :

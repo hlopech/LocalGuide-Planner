@@ -11,9 +11,13 @@
     <string name="nav_places">Места</string>
     <string name="nav_favorites">Избранное</string>
     <string name="nav_profile">Профиль</string>
+    <string name="nav_map">Карта</string>
     <string name="app_bar_title_places">Мои места</string>
     <string name="app_bar_title_favorites">Избранное</string>
     <string name="app_bar_title_profile">Профиль</string>
+    <string name="app_bar_title_map">Карта мест</string>
+    <string name="map_error_loading">Не удалось загрузить карту</string>
+    <string name="map_empty_no_coordinates">Нет мест с координатами</string>
     <!-- Favorites -->
     <string name="favorites_empty_title">Нет избранных мест</string>
     <string name="favorites_empty_subtitle">Добавляйте места в избранное через карточку места</string>

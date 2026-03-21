@@ -74,6 +74,9 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
 
+    // OSMDroid
+    implementation("org.osmdroid:osmdroid-android:6.1.20")
+
     // Coroutines
     implementation(libs.coroutines.android)
 

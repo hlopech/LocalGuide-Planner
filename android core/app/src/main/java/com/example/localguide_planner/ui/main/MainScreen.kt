@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Map
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.localguide_planner.R
 import com.example.localguide_planner.ui.navigation.Screen
+import com.example.localguide_planner.ui.map.MapScreen
 import com.example.localguide_planner.ui.places.favorites.FavoritesScreen
 import com.example.localguide_planner.ui.places.list.PlacesListScreen
 import com.example.localguide_planner.ui.profile.ProfileScreen
@@ -48,6 +50,7 @@ private val bottomNavItems = listOf(
     BottomNavItem(Screen.PlacesList.route, R.string.nav_places, Icons.Rounded.Place),
     BottomNavItem(Screen.Favorites.route, R.string.nav_favorites, Icons.Rounded.Favorite),
     BottomNavItem(Screen.Profile.route, R.string.nav_profile, Icons.Rounded.Person),
+    BottomNavItem(Screen.Map.route, R.string.nav_map, Icons.Rounded.Map),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,6 +101,8 @@ private fun MainTopAppBar(
             stringResource(R.string.app_bar_title_favorites)
         currentDestination?.hierarchy?.any { it.route == Screen.Profile.route } == true ->
             stringResource(R.string.app_bar_title_profile)
+        currentDestination?.hierarchy?.any { it.route == Screen.Map.route } == true ->
+            stringResource(R.string.app_bar_title_map)
         else -> stringResource(R.string.app_bar_title_places)
     }
     TopAppBar(
@@ -158,6 +163,9 @@ private fun MainNavHost(
         }
         composable(route = Screen.Profile.route) {
             ProfileScreen()
+        }
+        composable(route = Screen.Map.route) {
+            MapScreen(onNavigateToDetail = onNavigateToDetail)
         }
     }
 }

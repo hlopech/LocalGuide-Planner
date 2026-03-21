@@ -14,6 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -58,6 +59,17 @@ class PlacesListViewModelTest {
             isFavorite = false,
             createdAt = 2_000_000L,
         ),
+        Place(
+            id = "3",
+            name = "Городской музей",
+            description = "Описание музея",
+            category = PlaceCategory.MUSEUM,
+            address = "ул. Победы, 3",
+            latitude = 55.80,
+            longitude = 37.65,
+            isFavorite = false,
+            createdAt = 3_000_000L,
+        ),
     )
 
     @Before
@@ -86,11 +98,9 @@ class PlacesListViewModelTest {
         viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
 
         viewModel.uiState.test {
-            // Initial state
             val loadingState = awaitItem()
             assertTrue(loadingState.isLoading)
 
-            // After flow emits
             val listState = awaitItem()
             assertFalse(listState.isLoading)
             assertEquals(samplePlaces, listState.places)
@@ -171,13 +181,144 @@ class PlacesListViewModelTest {
             awaitItem() // skip loading state
 
             val listState = awaitItem()
-            assertEquals(2, listState.places.size)
+            assertEquals(3, listState.places.size)
             assertEquals("1", listState.places[0].id)
             assertEquals("Центральный парк", listState.places[0].name)
             assertEquals(PlaceCategory.PARK, listState.places[0].category)
             assertTrue(listState.places[0].isFavorite)
             assertEquals("2", listState.places[1].id)
             assertFalse(listState.places[1].isFavorite)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `searchByName filtersCorrectly`() = runTest {
+        every { getPlacesUseCase() } returns flowOf(samplePlaces)
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        viewModel.uiState.test {
+            awaitItem() // loading
+            awaitItem() // full list
+
+            viewModel.onSearchQueryChanged("парк")
+            val filtered = awaitItem()
+
+            assertEquals(1, filtered.places.size)
+            assertEquals("1", filtered.places[0].id)
+            assertEquals("парк", filtered.searchQuery)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `searchByAddress filtersCorrectly`() = runTest {
+        every { getPlacesUseCase() } returns flowOf(samplePlaces)
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        viewModel.uiState.test {
+            awaitItem() // loading
+            awaitItem() // full list
+
+            viewModel.onSearchQueryChanged("Победы")
+            val filtered = awaitItem()
+
+            assertEquals(2, filtered.places.size)
+            val ids = filtered.places.map { it.id }
+            assertTrue(ids.contains("2"))
+            assertTrue(ids.contains("3"))
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `filterByCategory filtersCorrectly`() = runTest {
+        every { getPlacesUseCase() } returns flowOf(samplePlaces)
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        viewModel.uiState.test {
+            awaitItem() // loading
+            awaitItem() // full list
+
+            viewModel.onCategorySelected(PlaceCategory.CAFE)
+            val filtered = awaitItem()
+
+            assertEquals(1, filtered.places.size)
+            assertEquals("2", filtered.places[0].id)
+            assertEquals(PlaceCategory.CAFE, filtered.selectedCategory)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `combinedFilter andLogic`() = runTest {
+        every { getPlacesUseCase() } returns flowOf(samplePlaces)
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        viewModel.uiState.test {
+            awaitItem() // loading
+            awaitItem() // full list
+
+            viewModel.onCategorySelected(PlaceCategory.MUSEUM)
+            awaitItem() // museum filter applied
+
+            viewModel.onSearchQueryChanged("Победы")
+            val filtered = awaitItem()
+
+            assertEquals(1, filtered.places.size)
+            assertEquals("3", filtered.places[0].id)
+            assertEquals(PlaceCategory.MUSEUM, filtered.selectedCategory)
+            assertEquals("Победы", filtered.searchQuery)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `clearFilter showsAllPlaces`() = runTest {
+        every { getPlacesUseCase() } returns flowOf(samplePlaces)
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        viewModel.uiState.test {
+            awaitItem() // loading
+            awaitItem() // full list
+
+            viewModel.onCategorySelected(PlaceCategory.PARK)
+            val filteredState = awaitItem()
+            assertEquals(1, filteredState.places.size)
+
+            viewModel.onCategorySelected(null)
+            val allPlacesState = awaitItem()
+
+            assertEquals(samplePlaces.size, allPlacesState.places.size)
+            assertNull(allPlacesState.selectedCategory)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `caseInsensitiveSearch`() = runTest {
+        every { getPlacesUseCase() } returns flowOf(samplePlaces)
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        viewModel.uiState.test {
+            awaitItem() // loading
+            awaitItem() // full list
+
+            viewModel.onSearchQueryChanged("ПАРК")
+            val upperCase = awaitItem()
+
+            viewModel.onSearchQueryChanged("парк")
+            val lowerCase = awaitItem()
+
+            assertEquals(upperCase.places.size, lowerCase.places.size)
+            assertEquals(1, lowerCase.places.size)
+            assertEquals("1", lowerCase.places[0].id)
 
             cancelAndIgnoreRemainingEvents()
         }

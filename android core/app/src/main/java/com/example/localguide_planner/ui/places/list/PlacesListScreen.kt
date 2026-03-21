@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.localguide_planner.ui.places.list
 
 import androidx.compose.animation.core.Spring
@@ -12,18 +14,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -32,7 +44,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -44,6 +58,8 @@ import com.example.localguide_planner.R
 import com.example.localguide_planner.domain.model.Place
 import com.example.localguide_planner.domain.model.PlaceCategory
 import com.example.localguide_planner.ui.places.common.AnimatedPlaceCard
+import com.example.localguide_planner.ui.places.common.toIcon
+import com.example.localguide_planner.ui.places.common.toStringRes
 import com.example.localguide_planner.ui.theme.LocalGuideDesignTokens
 import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
 
@@ -55,12 +71,13 @@ fun PlacesListScreen(
     viewModel: PlacesListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     PlacesListContent(
         uiState = uiState,
         onNavigateToDetail = onNavigateToDetail,
         onNavigateToAdd = onNavigateToAdd,
         onDeletePlace = { placeId -> viewModel.deletePlace(placeId) },
+        onSearchQueryChanged = viewModel::onSearchQueryChanged,
+        onCategorySelected = viewModel::onCategorySelected,
         modifier = modifier,
     )
 }
@@ -71,6 +88,8 @@ internal fun PlacesListContent(
     onNavigateToDetail: (String) -> Unit,
     onNavigateToAdd: () -> Unit,
     onDeletePlace: (String) -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
+    onCategorySelected: (PlaceCategory?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -106,6 +125,8 @@ internal fun PlacesListContent(
             onNavigateToDetail = onNavigateToDetail,
             onNavigateToAdd = onNavigateToAdd,
             onDeletePlace = onDeletePlace,
+            onSearchQueryChanged = onSearchQueryChanged,
+            onCategorySelected = onCategorySelected,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
@@ -120,25 +141,97 @@ private fun PlacesListBody(
     onNavigateToDetail: (String) -> Unit,
     onNavigateToAdd: () -> Unit,
     onDeletePlace: (String) -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
+    onCategorySelected: (PlaceCategory?) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when {
+        uiState.isLoading -> {
+            Box(modifier = modifier) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+        }
+
+        uiState.errorMessage != null -> {
+            Box(modifier = modifier) {
+                ErrorContent(modifier = Modifier.align(Alignment.Center))
+            }
+        }
+
+        else -> {
+            PlacesListWithFilters(
+                uiState = uiState,
+                listState = listState,
+                onNavigateToDetail = onNavigateToDetail,
+                onNavigateToAdd = onNavigateToAdd,
+                onDeletePlace = onDeletePlace,
+                onSearchQueryChanged = onSearchQueryChanged,
+                onCategorySelected = onCategorySelected,
+                modifier = modifier,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlacesListWithFilters(
+    uiState: PlacesListUiState,
+    listState: LazyListState,
+    onNavigateToDetail: (String) -> Unit,
+    onNavigateToAdd: () -> Unit,
+    onDeletePlace: (String) -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
+    onCategorySelected: (PlaceCategory?) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        PlacesSearchBar(
+            query = uiState.searchQuery,
+            onQueryChange = onSearchQueryChanged,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        PlacesCategoryFilter(
+            selectedCategory = uiState.selectedCategory,
+            onCategorySelected = onCategorySelected,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        PlacesListBodyContent(
+            uiState = uiState,
+            listState = listState,
+            onNavigateToDetail = onNavigateToDetail,
+            onNavigateToAdd = onNavigateToAdd,
+            onDeletePlace = onDeletePlace,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun PlacesListBodyContent(
+    uiState: PlacesListUiState,
+    listState: LazyListState,
+    onNavigateToDetail: (String) -> Unit,
+    onNavigateToAdd: () -> Unit,
+    onDeletePlace: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         when {
-            uiState.isLoading -> {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
-
-            uiState.errorMessage != null -> {
-                ErrorContent(
+            uiState.places.isEmpty() &&
+                uiState.searchQuery.isBlank() &&
+                uiState.selectedCategory == null -> {
+                EmptyPlacesContent(
+                    onAddClick = onNavigateToAdd,
                     modifier = Modifier.align(Alignment.Center),
                 )
             }
 
             uiState.places.isEmpty() -> {
-                EmptyPlacesContent(
-                    onAddClick = onNavigateToAdd,
-                    modifier = Modifier.align(Alignment.Center),
-                )
+                EmptySearchContent(modifier = Modifier.align(Alignment.Center))
             }
 
             else -> {
@@ -150,6 +243,96 @@ private fun PlacesListBody(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun PlacesSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var active by remember { mutableStateOf(false) }
+    SearchBar(
+        query = query,
+        onQueryChange = onQueryChange,
+        onSearch = { active = false },
+        active = active,
+        onActiveChange = { active = it },
+        placeholder = { Text(stringResource(R.string.places_search_placeholder)) },
+        leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
+        trailingIcon = if (query.isNotEmpty()) {
+            {
+                IconButton(onClick = { onQueryChange("") }) {
+                    Icon(Icons.Rounded.Close, contentDescription = null)
+                }
+            }
+        } else {
+            null
+        },
+        modifier = modifier.padding(horizontal = 16.dp),
+    ) { /* suggestions — пусто */ }
+}
+
+@Composable
+private fun PlacesCategoryFilter(
+    selectedCategory: PlaceCategory?,
+    onCategorySelected: (PlaceCategory?) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyRow(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        item {
+            FilterChip(
+                selected = selectedCategory == null,
+                onClick = { onCategorySelected(null) },
+                label = { Text(stringResource(R.string.places_filter_all)) },
+            )
+        }
+        items(PlaceCategory.entries) { category ->
+            FilterChip(
+                selected = category == selectedCategory,
+                onClick = { onCategorySelected(category) },
+                label = { Text(stringResource(category.toStringRes())) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = category.toIcon(),
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                    )
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun EmptySearchContent(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.SearchOff,
+            contentDescription = null,
+            modifier = Modifier.size(48.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = stringResource(R.string.places_search_empty_title),
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.places_search_empty_subtitle),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -253,6 +436,89 @@ fun PlacesListScreenWithDataPreview() {
             onNavigateToDetail = {},
             onNavigateToAdd = {},
             onDeletePlace = {},
+            onSearchQueryChanged = {},
+            onCategorySelected = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "PlacesListScreen — with search query")
+@Composable
+fun PlacesListScreenWithSearchPreview() {
+    LocalGuidePlannerTheme {
+        PlacesListContent(
+            uiState = PlacesListUiState(
+                places = listOf(
+                    Place(
+                        id = "1",
+                        name = "Центральный парк",
+                        description = "Красивый городской парк",
+                        category = PlaceCategory.PARK,
+                        address = "ул. Ленина, 1",
+                        latitude = 55.75,
+                        longitude = 37.62,
+                        isFavorite = true,
+                        createdAt = System.currentTimeMillis(),
+                    ),
+                ),
+                isLoading = false,
+                searchQuery = "парк",
+            ),
+            onNavigateToDetail = {},
+            onNavigateToAdd = {},
+            onDeletePlace = {},
+            onSearchQueryChanged = {},
+            onCategorySelected = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "PlacesListScreen — with active category filter")
+@Composable
+fun PlacesListScreenWithCategoryFilterPreview() {
+    LocalGuidePlannerTheme {
+        PlacesListContent(
+            uiState = PlacesListUiState(
+                places = listOf(
+                    Place(
+                        id = "2",
+                        name = "Кофейня «Уют»",
+                        description = "Уютное кафе в центре",
+                        category = PlaceCategory.CAFE,
+                        address = "пр. Победы, 15",
+                        latitude = null,
+                        longitude = null,
+                        isFavorite = false,
+                        createdAt = System.currentTimeMillis(),
+                    ),
+                ),
+                isLoading = false,
+                selectedCategory = PlaceCategory.CAFE,
+            ),
+            onNavigateToDetail = {},
+            onNavigateToAdd = {},
+            onDeletePlace = {},
+            onSearchQueryChanged = {},
+            onCategorySelected = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "PlacesListScreen — empty search result")
+@Composable
+fun PlacesListScreenEmptySearchPreview() {
+    LocalGuidePlannerTheme {
+        PlacesListContent(
+            uiState = PlacesListUiState(
+                places = emptyList(),
+                isLoading = false,
+                searchQuery = "xyz",
+            ),
+            onNavigateToDetail = {},
+            onNavigateToAdd = {},
+            onDeletePlace = {},
+            onSearchQueryChanged = {},
+            onCategorySelected = {},
         )
     }
 }
@@ -266,6 +532,8 @@ fun PlacesListScreenEmptyPreview() {
             onNavigateToDetail = {},
             onNavigateToAdd = {},
             onDeletePlace = {},
+            onSearchQueryChanged = {},
+            onCategorySelected = {},
         )
     }
 }
@@ -279,6 +547,8 @@ fun PlacesListScreenLoadingPreview() {
             onNavigateToDetail = {},
             onNavigateToAdd = {},
             onDeletePlace = {},
+            onSearchQueryChanged = {},
+            onCategorySelected = {},
         )
     }
 }
@@ -292,6 +562,8 @@ fun PlacesListScreenErrorPreview() {
             onNavigateToDetail = {},
             onNavigateToAdd = {},
             onDeletePlace = {},
+            onSearchQueryChanged = {},
+            onCategorySelected = {},
         )
     }
 }

@@ -16,6 +16,10 @@
     <string name="places_list_fab_add">Добавить место</string>
     <string name="place_card_delete">Удалить</string>
     <string name="places_error_loading">Не удалось загрузить места</string>
+    <string name="places_search_placeholder">Поиск по названию или адресу</string>
+    <string name="places_filter_all">Все</string>
+    <string name="places_search_empty_title">Ничего не найдено</string>
+    <string name="places_search_empty_subtitle">Попробуйте изменить запрос или фильтр</string>
     <!-- Place categories -->
     <string name="category_restaurant">Ресторан</string>
     <string name="category_cafe">Кафе</string>

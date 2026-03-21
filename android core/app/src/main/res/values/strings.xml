@@ -9,7 +9,19 @@
     <string name="onboarding_button_continue">Начать</string>
     <!-- Navigation -->
     <string name="nav_places">Места</string>
+    <string name="nav_profile">Профиль</string>
     <string name="app_bar_title_places">Мои места</string>
+    <string name="app_bar_title_profile">Профиль</string>
+    <!-- Profile -->
+    <string name="profile_stat_total_places">Всего мест</string>
+    <string name="profile_stat_favorites">Избранных</string>
+    <string name="profile_stat_top_category">Топ категория</string>
+    <string name="profile_stat_top_category_none">—</string>
+    <string name="profile_edit_name_label">Ваше имя</string>
+    <string name="profile_save_button">Сохранить</string>
+    <string name="profile_reset_button">Сбросить все данные</string>
+    <string name="profile_reset_dialog_title">Удалить все места?</string>
+    <string name="profile_reset_dialog_message">Это действие нельзя отменить. Все сохранённые места будут удалены.</string>
     <!-- Places List -->
     <string name="places_list_empty_title">Нет сохранённых мест</string>
     <string name="places_list_empty_action">Добавить первое место</string>

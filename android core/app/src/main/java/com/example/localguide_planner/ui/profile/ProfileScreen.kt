@@ -100,6 +100,7 @@ private fun ProfileContent(
 
 @Composable
 private fun ProfileHeroSection(userName: String, modifier: Modifier = Modifier) {
+    val displayName = userName.ifEmpty { stringResource(R.string.profile_hero_name_empty) }
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -118,7 +119,7 @@ private fun ProfileHeroSection(userName: String, modifier: Modifier = Modifier) 
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = userName.ifEmpty { "—" },
+                text = displayName,
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.White,
             )

@@ -17,6 +17,7 @@
     <string name="profile_stat_favorites">Избранных</string>
     <string name="profile_stat_top_category">Топ категория</string>
     <string name="profile_stat_top_category_none">—</string>
+    <string name="profile_hero_name_empty">—</string>
     <string name="profile_edit_name_label">Ваше имя</string>
     <string name="profile_save_button">Сохранить</string>
     <string name="profile_reset_button">Сбросить все данные</string>

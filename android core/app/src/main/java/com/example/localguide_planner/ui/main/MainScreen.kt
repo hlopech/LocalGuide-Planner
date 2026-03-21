@@ -1,5 +1,6 @@
 package com.example.localguide_planner.ui.main
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Person
@@ -13,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -20,8 +22,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -54,70 +58,98 @@ fun MainScreen(
     val currentDestination = navBackStackEntry?.destination
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val currentTitle = when {
-        currentDestination?.hierarchy?.any {
-            it.route == Screen.PlacesList.route
-        } == true -> stringResource(R.string.app_bar_title_places)
-        currentDestination?.hierarchy?.any {
-            it.route == Screen.Profile.route
-        } == true -> stringResource(R.string.app_bar_title_profile)
-        else -> stringResource(R.string.app_bar_title_places)
-    }
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = currentTitle,
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
-                },
+            MainTopAppBar(
+                currentDestination = currentDestination,
                 scrollBehavior = scrollBehavior,
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                ),
             )
         },
         bottomBar = {
-            NavigationBar {
-                bottomNavItems.forEach { item ->
-                    NavigationBarItem(
-                        icon = { Icon(imageVector = item.icon, contentDescription = null) },
-                        label = { Text(text = stringResource(id = item.labelRes)) },
-                        selected = currentDestination?.hierarchy?.any {
-                            it.route == item.route
-                        } == true,
-                        onClick = {
-                            nestedNavController.navigate(item.route) {
-                                popUpTo(nestedNavController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                    )
-                }
-            }
+            MainBottomBar(
+                currentDestination = currentDestination,
+                navController = nestedNavController,
+            )
         },
     ) { innerPadding ->
-        NavHost(
+        MainNavHost(
             navController = nestedNavController,
-            startDestination = Screen.PlacesList.route,
-            modifier = Modifier.padding(innerPadding),
-        ) {
-            composable(route = Screen.PlacesList.route) {
-                PlacesListScreen(
-                    onNavigateToDetail = onNavigateToDetail,
-                    onNavigateToAdd = onNavigateToAdd,
-                )
-            }
-            composable(route = Screen.Profile.route) {
-                ProfileScreen()
-            }
+            innerPadding = innerPadding,
+            onNavigateToDetail = onNavigateToDetail,
+            onNavigateToAdd = onNavigateToAdd,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MainTopAppBar(
+    currentDestination: NavDestination?,
+    scrollBehavior: TopAppBarScrollBehavior,
+) {
+    val title = when {
+        currentDestination?.hierarchy?.any { it.route == Screen.PlacesList.route } == true ->
+            stringResource(R.string.app_bar_title_places)
+        currentDestination?.hierarchy?.any { it.route == Screen.Profile.route } == true ->
+            stringResource(R.string.app_bar_title_profile)
+        else -> stringResource(R.string.app_bar_title_places)
+    }
+    TopAppBar(
+        title = { Text(text = title, style = MaterialTheme.typography.headlineMedium) },
+        scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+        ),
+    )
+}
+
+@Composable
+private fun MainBottomBar(
+    currentDestination: NavDestination?,
+    navController: NavHostController,
+) {
+    NavigationBar {
+        bottomNavItems.forEach { item ->
+            NavigationBarItem(
+                icon = { Icon(imageVector = item.icon, contentDescription = null) },
+                label = { Text(text = stringResource(id = item.labelRes)) },
+                selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                onClick = {
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun MainNavHost(
+    navController: NavHostController,
+    innerPadding: PaddingValues,
+    onNavigateToDetail: (String) -> Unit,
+    onNavigateToAdd: () -> Unit,
+) {
+    NavHost(
+        navController = navController,
+        startDestination = Screen.PlacesList.route,
+        modifier = Modifier.padding(innerPadding),
+    ) {
+        composable(route = Screen.PlacesList.route) {
+            PlacesListScreen(
+                onNavigateToDetail = onNavigateToDetail,
+                onNavigateToAdd = onNavigateToAdd,
+            )
+        }
+        composable(route = Screen.Profile.route) {
+            ProfileScreen()
         }
     }
 }

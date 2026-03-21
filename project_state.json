@@ -30,8 +30,8 @@
 
   "current_focus": {
     "agent": "orchestrator",
-    "action": "task_016_development",
-    "context": "TASK-015 (ProfileScreen) смержена PR #17 — PASS. Запускаем TASK-016 (Favorites tab)."
+    "action": "task_017_development",
+    "context": "TASK-016 (Favorites tab) смержена PR #18 — PASS. Запускаем TASK-017 (Map OSMDroid)."
   },
 
   "tasks": [
@@ -269,12 +269,12 @@
       "title": "Вкладка «Избранное» — FavoritesScreen, FavoritesViewModel, третья вкладка BottomNavBar",
       "type": "feature",
       "priority": "High",
-      "status": "in_progress",
+      "status": "done",
       "sprint": "SPRINT-3",
       "branch": "feature/TASK-016-favorites-tab",
-      "pr": null,
-      "qa_verdict": null,
-      "merged": false,
+      "pr": "#18",
+      "qa_verdict": "PASS",
+      "merged": true,
       "created_at": "2026-03-21",
       "updated_at": "2026-03-21"
     },
@@ -283,9 +283,9 @@
       "title": "Карта мест — OSMDroid интеграция, четвёртая вкладка BottomNavBar",
       "type": "feature",
       "priority": "High",
-      "status": "todo",
+      "status": "in_progress",
       "sprint": "SPRINT-3",
-      "branch": null,
+      "branch": "feature/TASK-017-map-osmdroid",
       "pr": null,
       "qa_verdict": null,
       "merged": false,
@@ -330,7 +330,7 @@
   "git": {
     "main_branch": "main",
     "dev_branch": "develop",
-    "active_branches": ["feature/TASK-016-favorites-tab"],
+    "active_branches": ["feature/TASK-017-map-osmdroid"],
     "merged_branches": [
       "feature/TASK-001-setup-dependencies",
       "feature/TASK-002-domain-layer",
@@ -346,16 +346,17 @@
       "feature/TASK-012-place-detail-ui",
       "feature/TASK-013-add-edit-place-ui",
       "feature/TASK-014-search-and-filters",
-      "feature/TASK-015-profile-screen"
+      "feature/TASK-015-profile-screen",
+      "feature/TASK-016-favorites-tab"
     ],
     "open_prs": []
   },
 
   "stats": {
     "tasks_total": 18,
-    "tasks_done": 15,
+    "tasks_done": 16,
     "tasks_in_progress": 1,
-    "tasks_todo": 2,
+    "tasks_todo": 1,
     "bugs_open": 6,
     "bugs_closed": 22,
     "sprints_completed": 2

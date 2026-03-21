@@ -227,7 +227,7 @@ Room выполняет DELETE без возврата значения. Мет�
 **Статус:** review
 
 **Ветка:** feature/TASK-015-profile-screen
-**PR:** (см. GitHub)
+**PR:** https://github.com/hlopech/LocalGuide-Planner/pull/17
 **QA вердикт:** pending
 **Мерж:** ожидает
 

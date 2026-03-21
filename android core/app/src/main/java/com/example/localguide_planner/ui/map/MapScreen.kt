@@ -36,6 +36,7 @@ private const val DEFAULT_LAT = 55.7558
 private const val DEFAULT_LON = 37.6173
 private const val DEFAULT_ZOOM = 10.0
 private const val MARKER_SIZE_DP = 32
+private const val OSMDROID_PREFS = "osmdroid"
 
 @Composable
 fun MapScreen(
@@ -86,7 +87,7 @@ private fun OsmMapView(
 ) {
     val context = LocalContext.current
     val mapView = remember {
-        mutableStateOf(createMapView(context, places))
+        mutableStateOf(createMapView(context))
     }
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -105,27 +106,30 @@ private fun OsmMapView(
     AndroidView(
         modifier = modifier,
         factory = { mapView.value },
-        update = { mv -> updateMapMarkers(mv, places, context, onMarkerClick) },
+        update = { mv ->
+            updateMapMarkers(mv, places, context, onMarkerClick)
+            val firstWithCoords = places.firstOrNull { it.latitude != null && it.longitude != null }
+            if (firstWithCoords != null) {
+                mv.controller.setCenter(
+                    GeoPoint(firstWithCoords.latitude!!, firstWithCoords.longitude!!),
+                )
+            }
+            mv.invalidate()
+        },
     )
 }
 
-private fun createMapView(context: Context, places: List<Place>): MapView {
+private fun createMapView(context: Context): MapView {
     Configuration.getInstance().load(
         context,
-        context.getSharedPreferences("osmdroid", Context.MODE_PRIVATE),
+        context.getSharedPreferences(OSMDROID_PREFS, Context.MODE_PRIVATE),
     )
     Configuration.getInstance().userAgentValue = context.packageName
     return MapView(context).apply {
         setTileSource(TileSourceFactory.MAPNIK)
         setMultiTouchControls(true)
-        val firstWithCoords = places.firstOrNull { it.latitude != null && it.longitude != null }
-        val center = if (firstWithCoords != null) {
-            GeoPoint(firstWithCoords.latitude!!, firstWithCoords.longitude!!)
-        } else {
-            GeoPoint(DEFAULT_LAT, DEFAULT_LON)
-        }
         controller.setZoom(DEFAULT_ZOOM)
-        controller.setCenter(center)
+        controller.setCenter(GeoPoint(DEFAULT_LAT, DEFAULT_LON))
     }
 }
 
@@ -162,6 +166,17 @@ private fun createMarkerDrawable(context: Context, color: Color): GradientDrawab
 }
 
 @Preview(showBackground = true, name = "MapScreen — loading")
+@Composable
+fun MapScreenPreview() {
+    LocalGuidePlannerTheme {
+        MapContent(
+            uiState = MapUiState(isLoading = true),
+            onNavigateToDetail = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "MapScreen — loading internal")
 @Composable
 private fun MapContentLoadingPreview() {
     LocalGuidePlannerTheme {

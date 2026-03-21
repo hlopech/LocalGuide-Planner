@@ -198,10 +198,10 @@ composable(route = Screen.Favorites.route) {
 
 ## Статус выполнения
 
-**Статус:** todo
+**Статус:** review
 
-**Ветка:** feature/TASK-016-favorites-tab (заполняет Developer)
-**PR:** (заполняет Developer)
+**Ветка:** feature/TASK-016-favorites-tab
+**PR:** https://github.com/hlopech/LocalGuide-Planner/pull/18
 **QA вердикт:** pending
 **Мерж:** ожидает
 
@@ -209,3 +209,4 @@ composable(route = Screen.Favorites.route) {
 | Дата | Статус | Агент | Примечание |
 |------|--------|-------|-----------|
 | 2026-03-21 | todo | Tech Director | Задача создана |
+| 2026-03-21 | review | Developer | Реализовано: FavoritesScreen, FavoritesViewModel, третья вкладка BottomNavBar, 8 unit-тестов. PR #18 |

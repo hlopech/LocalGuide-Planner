@@ -3,6 +3,7 @@ package com.example.localguide_planner.ui.main
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +33,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.localguide_planner.R
 import com.example.localguide_planner.ui.navigation.Screen
+import com.example.localguide_planner.ui.places.favorites.FavoritesScreen
 import com.example.localguide_planner.ui.places.list.PlacesListScreen
 import com.example.localguide_planner.ui.profile.ProfileScreen
 import com.example.localguide_planner.ui.theme.LocalGuidePlannerTheme
@@ -44,6 +46,7 @@ private data class BottomNavItem(
 
 private val bottomNavItems = listOf(
     BottomNavItem(Screen.PlacesList.route, R.string.nav_places, Icons.Rounded.Place),
+    BottomNavItem(Screen.Favorites.route, R.string.nav_favorites, Icons.Rounded.Favorite),
     BottomNavItem(Screen.Profile.route, R.string.nav_profile, Icons.Rounded.Person),
 )
 
@@ -91,6 +94,8 @@ private fun MainTopAppBar(
     val title = when {
         currentDestination?.hierarchy?.any { it.route == Screen.PlacesList.route } == true ->
             stringResource(R.string.app_bar_title_places)
+        currentDestination?.hierarchy?.any { it.route == Screen.Favorites.route } == true ->
+            stringResource(R.string.app_bar_title_favorites)
         currentDestination?.hierarchy?.any { it.route == Screen.Profile.route } == true ->
             stringResource(R.string.app_bar_title_profile)
         else -> stringResource(R.string.app_bar_title_places)
@@ -147,6 +152,9 @@ private fun MainNavHost(
                 onNavigateToDetail = onNavigateToDetail,
                 onNavigateToAdd = onNavigateToAdd,
             )
+        }
+        composable(route = Screen.Favorites.route) {
+            FavoritesScreen(onNavigateToDetail = onNavigateToDetail)
         }
         composable(route = Screen.Profile.route) {
             ProfileScreen()

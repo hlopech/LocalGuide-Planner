@@ -9,9 +9,15 @@
     <string name="onboarding_button_continue">Начать</string>
     <!-- Navigation -->
     <string name="nav_places">Места</string>
+    <string name="nav_favorites">Избранное</string>
     <string name="nav_profile">Профиль</string>
     <string name="app_bar_title_places">Мои места</string>
+    <string name="app_bar_title_favorites">Избранное</string>
     <string name="app_bar_title_profile">Профиль</string>
+    <!-- Favorites -->
+    <string name="favorites_empty_title">Нет избранных мест</string>
+    <string name="favorites_empty_subtitle">Добавляйте места в избранное через карточку места</string>
+    <string name="favorites_delete_hint">Чтобы удалить место, перейдите в его карточку</string>
     <!-- Profile -->
     <string name="profile_stat_total_places">Всего мест</string>
     <string name="profile_stat_favorites">Избранных</string>

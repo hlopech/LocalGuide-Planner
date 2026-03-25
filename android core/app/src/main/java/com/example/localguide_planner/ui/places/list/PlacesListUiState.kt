@@ -9,4 +9,5 @@ data class PlacesListUiState(
     val errorMessage: String? = null,
     val searchQuery: String = "",
     val selectedCategory: PlaceCategory? = null,
+    val isSearchActive: Boolean = false,
 )

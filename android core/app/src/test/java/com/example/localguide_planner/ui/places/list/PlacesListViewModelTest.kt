@@ -323,4 +323,71 @@ class PlacesListViewModelTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `initial isSearchActive is false`() {
+        every { getPlacesUseCase() } returns flowOf(emptyList())
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        assertFalse(viewModel.uiState.value.isSearchActive)
+    }
+
+    @Test
+    fun `onSearchActiveChanged true updates isSearchActive in uiState`() = runTest {
+        every { getPlacesUseCase() } returns flowOf(samplePlaces)
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        viewModel.uiState.test {
+            awaitItem() // loading
+            awaitItem() // full list
+
+            viewModel.onSearchActiveChanged(true)
+            val activeState = awaitItem()
+
+            assertTrue(activeState.isSearchActive)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `onSearchActiveChanged false collapses search bar in uiState`() = runTest {
+        every { getPlacesUseCase() } returns flowOf(samplePlaces)
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        viewModel.uiState.test {
+            awaitItem() // loading
+            awaitItem() // full list
+
+            viewModel.onSearchActiveChanged(true)
+            awaitItem() // active = true
+
+            viewModel.onSearchActiveChanged(false)
+            val collapsedState = awaitItem()
+
+            assertFalse(collapsedState.isSearchActive)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `onSearchActiveChanged does not affect places list`() = runTest {
+        every { getPlacesUseCase() } returns flowOf(samplePlaces)
+        viewModel = PlacesListViewModel(getPlacesUseCase, deletePlaceUseCase)
+
+        viewModel.uiState.test {
+            awaitItem() // loading
+            val fullList = awaitItem()
+            val placesCount = fullList.places.size
+
+            viewModel.onSearchActiveChanged(true)
+            val activeState = awaitItem()
+
+            assertEquals(placesCount, activeState.places.size)
+            assertTrue(activeState.isSearchActive)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
 }

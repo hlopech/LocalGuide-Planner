@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Description
-import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Label
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -152,11 +152,9 @@ private fun AddEditPlaceFormContent(
     ) {
         item {
             AnimatedFormField(index = 0, visible = visible) {
-                LocalGuideTextField(
-                    value = uiState.name,
-                    onValueChange = onNameChange,
-                    label = stringResource(R.string.add_edit_place_field_name),
-                    leadingIcon = Icons.Rounded.Edit,
+                PlaceNameField(
+                    name = uiState.name,
+                    onNameChange = onNameChange,
                     isError = uiState.nameError != null,
                     errorMessage = uiState.nameError,
                 )
@@ -164,30 +162,22 @@ private fun AddEditPlaceFormContent(
         }
         item {
             AnimatedFormField(index = 1, visible = visible) {
-                LocalGuideTextField(
-                    value = uiState.address,
-                    onValueChange = onAddressChange,
-                    label = stringResource(R.string.add_edit_place_field_address),
-                    leadingIcon = Icons.Rounded.LocationOn,
-                )
+                PlaceAddressField(address = uiState.address, onAddressChange = onAddressChange)
             }
         }
         item {
             AnimatedFormField(index = 2, visible = visible) {
-                LocalGuideTextField(
-                    value = uiState.description,
-                    onValueChange = onDescriptionChange,
-                    label = stringResource(R.string.add_edit_place_label_description),
-                    leadingIcon = Icons.Rounded.Description,
-                    maxLines = 5,
+                PlaceDescriptionField(
+                    description = uiState.description,
+                    onDescriptionChange = onDescriptionChange,
                 )
             }
         }
         item {
             AnimatedFormField(index = 3, visible = visible) {
-                CategorySelector(
+                PlaceCategorySelector(
                     selectedCategory = uiState.category,
-                    onCategorySelected = onCategoryChange,
+                    onCategoryChange = onCategoryChange,
                 )
             }
         }
@@ -197,6 +187,61 @@ private fun AddEditPlaceFormContent(
             }
         }
     }
+}
+
+@Composable
+private fun PlaceNameField(
+    name: String,
+    onNameChange: (String) -> Unit,
+    isError: Boolean = false,
+    errorMessage: String? = null,
+) {
+    LocalGuideTextField(
+        value = name,
+        onValueChange = onNameChange,
+        label = stringResource(R.string.add_edit_place_field_name),
+        leadingIcon = Icons.Rounded.Label,
+        isError = isError,
+        errorMessage = errorMessage,
+    )
+}
+
+@Composable
+private fun PlaceAddressField(
+    address: String,
+    onAddressChange: (String) -> Unit,
+) {
+    LocalGuideTextField(
+        value = address,
+        onValueChange = onAddressChange,
+        label = stringResource(R.string.add_edit_place_field_address),
+        leadingIcon = Icons.Rounded.LocationOn,
+    )
+}
+
+@Composable
+private fun PlaceDescriptionField(
+    description: String,
+    onDescriptionChange: (String) -> Unit,
+) {
+    LocalGuideTextField(
+        value = description,
+        onValueChange = onDescriptionChange,
+        label = stringResource(R.string.add_edit_place_label_description),
+        leadingIcon = Icons.Rounded.Description,
+        maxLines = 5,
+    )
+}
+
+@Composable
+private fun PlaceCategorySelector(
+    selectedCategory: PlaceCategory,
+    onCategoryChange: (PlaceCategory) -> Unit,
+) {
+    CategorySelector(
+        selectedCategory = selectedCategory,
+        onCategorySelected = onCategoryChange,
+    )
 }
 
 @Composable

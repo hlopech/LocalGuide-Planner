@@ -36,6 +36,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -44,9 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -78,6 +77,7 @@ fun PlacesListScreen(
         onDeletePlace = { placeId -> viewModel.deletePlace(placeId) },
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
         onCategorySelected = viewModel::onCategorySelected,
+        onSearchActiveChanged = viewModel::onSearchActiveChanged,
         modifier = modifier,
     )
 }
@@ -90,6 +90,7 @@ internal fun PlacesListContent(
     onDeletePlace: (String) -> Unit,
     onSearchQueryChanged: (String) -> Unit,
     onCategorySelected: (PlaceCategory?) -> Unit,
+    onSearchActiveChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -108,14 +109,7 @@ internal fun PlacesListContent(
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text(text = stringResource(R.string.places_list_fab_add)) },
-                icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = null) },
-                onClick = onNavigateToAdd,
-                expanded = !isScrolled,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-            )
+            PlacesListFab(isScrolled = isScrolled, onNavigateToAdd = onNavigateToAdd)
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) { Snackbar(it) } },
     ) { innerPadding ->
@@ -127,11 +121,27 @@ internal fun PlacesListContent(
             onDeletePlace = onDeletePlace,
             onSearchQueryChanged = onSearchQueryChanged,
             onCategorySelected = onCategorySelected,
+            onSearchActiveChanged = onSearchActiveChanged,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
         )
     }
+}
+
+@Composable
+private fun PlacesListFab(
+    isScrolled: Boolean,
+    onNavigateToAdd: () -> Unit,
+) {
+    ExtendedFloatingActionButton(
+        text = { Text(text = stringResource(R.string.places_list_fab_add)) },
+        icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = null) },
+        onClick = onNavigateToAdd,
+        expanded = !isScrolled,
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+    )
 }
 
 @Composable
@@ -143,6 +153,7 @@ private fun PlacesListBody(
     onDeletePlace: (String) -> Unit,
     onSearchQueryChanged: (String) -> Unit,
     onCategorySelected: (PlaceCategory?) -> Unit,
+    onSearchActiveChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when {
@@ -167,6 +178,7 @@ private fun PlacesListBody(
                 onDeletePlace = onDeletePlace,
                 onSearchQueryChanged = onSearchQueryChanged,
                 onCategorySelected = onCategorySelected,
+                onSearchActiveChanged = onSearchActiveChanged,
                 modifier = modifier,
             )
         }
@@ -182,12 +194,15 @@ private fun PlacesListWithFilters(
     onDeletePlace: (String) -> Unit,
     onSearchQueryChanged: (String) -> Unit,
     onCategorySelected: (PlaceCategory?) -> Unit,
+    onSearchActiveChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         PlacesSearchBar(
             query = uiState.searchQuery,
+            expanded = uiState.isSearchActive,
             onQueryChange = onSearchQueryChanged,
+            onExpandedChange = onSearchActiveChanged,
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(4.dp))
@@ -249,27 +264,34 @@ private fun PlacesListBodyContent(
 @Composable
 private fun PlacesSearchBar(
     query: String,
+    expanded: Boolean,
     onQueryChange: (String) -> Unit,
+    onExpandedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var active by remember { mutableStateOf(false) }
     SearchBar(
-        query = query,
-        onQueryChange = onQueryChange,
-        onSearch = { active = false },
-        active = active,
-        onActiveChange = { active = it },
-        placeholder = { Text(stringResource(R.string.places_search_placeholder)) },
-        leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
-        trailingIcon = if (query.isNotEmpty()) {
-            {
-                IconButton(onClick = { onQueryChange("") }) {
-                    Icon(Icons.Rounded.Close, contentDescription = null)
-                }
-            }
-        } else {
-            null
+        inputField = {
+            SearchBarDefaults.InputField(
+                query = query,
+                onQueryChange = onQueryChange,
+                onSearch = { onExpandedChange(false) },
+                expanded = expanded,
+                onExpandedChange = onExpandedChange,
+                placeholder = { Text(stringResource(R.string.places_search_placeholder)) },
+                leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
+                trailingIcon = if (query.isNotEmpty()) {
+                    {
+                        IconButton(onClick = { onQueryChange("") }) {
+                            Icon(Icons.Rounded.Close, contentDescription = null)
+                        }
+                    }
+                } else {
+                    null
+                },
+            )
         },
+        expanded = expanded,
+        onExpandedChange = onExpandedChange,
         modifier = modifier.padding(horizontal = 16.dp),
     ) { /* suggestions — пусто */ }
 }
@@ -438,6 +460,7 @@ fun PlacesListScreenWithDataPreview() {
             onDeletePlace = {},
             onSearchQueryChanged = {},
             onCategorySelected = {},
+            onSearchActiveChanged = {},
         )
     }
 }
@@ -469,6 +492,7 @@ fun PlacesListScreenWithSearchPreview() {
             onDeletePlace = {},
             onSearchQueryChanged = {},
             onCategorySelected = {},
+            onSearchActiveChanged = {},
         )
     }
 }
@@ -500,6 +524,7 @@ fun PlacesListScreenWithCategoryFilterPreview() {
             onDeletePlace = {},
             onSearchQueryChanged = {},
             onCategorySelected = {},
+            onSearchActiveChanged = {},
         )
     }
 }
@@ -519,6 +544,7 @@ fun PlacesListScreenEmptySearchPreview() {
             onDeletePlace = {},
             onSearchQueryChanged = {},
             onCategorySelected = {},
+            onSearchActiveChanged = {},
         )
     }
 }
@@ -534,6 +560,7 @@ fun PlacesListScreenEmptyPreview() {
             onDeletePlace = {},
             onSearchQueryChanged = {},
             onCategorySelected = {},
+            onSearchActiveChanged = {},
         )
     }
 }
@@ -549,6 +576,7 @@ fun PlacesListScreenLoadingPreview() {
             onDeletePlace = {},
             onSearchQueryChanged = {},
             onCategorySelected = {},
+            onSearchActiveChanged = {},
         )
     }
 }
@@ -564,6 +592,7 @@ fun PlacesListScreenErrorPreview() {
             onDeletePlace = {},
             onSearchQueryChanged = {},
             onCategorySelected = {},
+            onSearchActiveChanged = {},
         )
     }
 }

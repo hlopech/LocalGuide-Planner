@@ -23,12 +23,14 @@ class PlacesListViewModel @Inject constructor(
 
     private val _searchQuery = MutableStateFlow("")
     private val _selectedCategory = MutableStateFlow<PlaceCategory?>(null)
+    private val _isSearchActive = MutableStateFlow(false)
 
     val uiState: StateFlow<PlacesListUiState> = combine(
         getPlacesUseCase(),
         _searchQuery,
         _selectedCategory,
-    ) { places, query, category ->
+        _isSearchActive,
+    ) { places, query, category, isSearchActive ->
         val filtered = places.filter { place ->
             val matchesQuery = query.isBlank() ||
                 place.name.contains(query, ignoreCase = true) ||
@@ -40,6 +42,7 @@ class PlacesListViewModel @Inject constructor(
             places = filtered,
             searchQuery = query,
             selectedCategory = category,
+            isSearchActive = isSearchActive,
             isLoading = false,
         )
     }
@@ -62,5 +65,9 @@ class PlacesListViewModel @Inject constructor(
 
     fun onCategorySelected(category: PlaceCategory?) {
         _selectedCategory.value = category
+    }
+
+    fun onSearchActiveChanged(isActive: Boolean) {
+        _isSearchActive.value = isActive
     }
 }

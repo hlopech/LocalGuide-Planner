@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -30,6 +32,10 @@ class ProfileViewModel @Inject constructor(
 
     private val _latestProfile = MutableStateFlow<UserProfile?>(null)
 
+    private val _profileStateJob = getUserProfileUseCase()
+        .onEach { profile -> _latestProfile.value = profile }
+        .launchIn(viewModelScope)
+
     val uiState: StateFlow<ProfileUiState> = combine(
         getUserProfileUseCase(),
         getPlacesUseCase(),
@@ -37,7 +43,6 @@ class ProfileViewModel @Inject constructor(
         _isSaving,
         _showResetDialog,
     ) { profile, places, editedName, isSaving, showDialog ->
-        _latestProfile.value = profile
         val topCategory = places
             .groupBy { it.category }
             .maxByOrNull { it.value.size }

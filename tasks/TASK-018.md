@@ -195,12 +195,13 @@ val uiState = combine(
 **Статус:** review
 
 **Ветка:** bugfix/TASK-018-sprint4-bugfix
-**PR:** (заполняет Developer)
-**QA вердикт:** pending
-**Мерж:** ожидает
+**PR:** #20
+**QA вердикт:** FAIL
+**Мерж:** заблокирован
 
 ### История статусов
 | Дата | Статус | Агент | Примечание |
 |------|--------|-------|-----------|
 | 2026-03-25 | todo | Tech Director | Задача создана. Закрывает BUG-029, 030, 032, 033, 034, 037 |
 | 2026-03-25 | review | Developer | Реализованы все исправления: SearchBar API мигрирован, isSearchActive поднят в ViewModel, иконка Label, ProfileViewModel side effect устранён |
+| 2026-03-25 | FAIL | QA Tester | Вердикт FAIL. Найдены 2 новых бага: BUG-042 (тест ProfileViewModelTest красный — High), BUG-043 (AddEditPlaceFormContent 55 строк — Low). Мерж заблокирован до исправления BUG-042. |

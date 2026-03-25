@@ -150,41 +150,61 @@ private fun AddEditPlaceFormContent(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        item {
-            AnimatedFormField(index = 0, visible = visible) {
-                PlaceNameField(
-                    name = uiState.name,
-                    onNameChange = onNameChange,
-                    isError = uiState.nameError != null,
-                    errorMessage = uiState.nameError,
-                )
-            }
+        addEditPlaceFormItems(
+            uiState = uiState,
+            visible = visible,
+            onNameChange = onNameChange,
+            onAddressChange = onAddressChange,
+            onDescriptionChange = onDescriptionChange,
+            onCategoryChange = onCategoryChange,
+            onSaveClicked = onSaveClicked,
+        )
+    }
+}
+
+private fun androidx.compose.foundation.lazy.LazyListScope.addEditPlaceFormItems(
+    uiState: AddEditPlaceUiState,
+    visible: Boolean,
+    onNameChange: (String) -> Unit,
+    onAddressChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
+    onCategoryChange: (PlaceCategory) -> Unit,
+    onSaveClicked: () -> Unit,
+) {
+    item {
+        AnimatedFormField(index = 0, visible = visible) {
+            PlaceNameField(
+                name = uiState.name,
+                onNameChange = onNameChange,
+                isError = uiState.nameError != null,
+                errorMessage = uiState.nameError,
+            )
         }
-        item {
-            AnimatedFormField(index = 1, visible = visible) {
-                PlaceAddressField(address = uiState.address, onAddressChange = onAddressChange)
-            }
+    }
+    item {
+        AnimatedFormField(index = 1, visible = visible) {
+            PlaceAddressField(address = uiState.address, onAddressChange = onAddressChange)
         }
-        item {
-            AnimatedFormField(index = 2, visible = visible) {
-                PlaceDescriptionField(
-                    description = uiState.description,
-                    onDescriptionChange = onDescriptionChange,
-                )
-            }
+    }
+    item {
+        AnimatedFormField(index = 2, visible = visible) {
+            PlaceDescriptionField(
+                description = uiState.description,
+                onDescriptionChange = onDescriptionChange,
+            )
         }
-        item {
-            AnimatedFormField(index = 3, visible = visible) {
-                PlaceCategorySelector(
-                    selectedCategory = uiState.category,
-                    onCategoryChange = onCategoryChange,
-                )
-            }
+    }
+    item {
+        AnimatedFormField(index = 3, visible = visible) {
+            PlaceCategorySelector(
+                selectedCategory = uiState.category,
+                onCategoryChange = onCategoryChange,
+            )
         }
-        item {
-            AnimatedFormField(index = 4, visible = visible) {
-                SaveButton(isSaving = uiState.isSaving, onClick = onSaveClicked)
-            }
+    }
+    item {
+        AnimatedFormField(index = 4, visible = visible) {
+            SaveButton(isSaving = uiState.isSaving, onClick = onSaveClicked)
         }
     }
 }

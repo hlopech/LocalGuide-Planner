@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -129,10 +130,33 @@ class PlaceDaoTest {
         assertEquals(100L, result[2].createdAt)
     }
 
+    @Test
+    fun upsertPlace_toggleFavorite_isFavoriteFieldUpdated() = runBlocking {
+        dao.upsertPlace(buildPlaceEntity(id = "fav1", name = "Избранное место", isFavorite = false))
+        dao.upsertPlace(buildPlaceEntity(id = "fav1", name = "Избранное место", isFavorite = true))
+
+        val result = dao.getPlaceById("fav1")
+
+        assertNotNull(result)
+        assertTrue(result!!.isFavorite)
+    }
+
+    @Test
+    fun upsertPlace_unfavoritePlace_isFavoriteFieldUpdated() = runBlocking {
+        dao.upsertPlace(buildPlaceEntity(id = "fav2", name = "Было избранным", isFavorite = true))
+        dao.upsertPlace(buildPlaceEntity(id = "fav2", name = "Было избранным", isFavorite = false))
+
+        val result = dao.getPlaceById("fav2")
+
+        assertNotNull(result)
+        assertFalse(result!!.isFavorite)
+    }
+
     private fun buildPlaceEntity(
         id: String,
         name: String,
         createdAt: Long = System.currentTimeMillis(),
+        isFavorite: Boolean = false,
     ): PlaceEntity = PlaceEntity(
         id = id,
         name = name,
@@ -141,7 +165,7 @@ class PlaceDaoTest {
         address = "ул. Тестовая, 1",
         latitude = null,
         longitude = null,
-        isFavorite = false,
+        isFavorite = isFavorite,
         createdAt = createdAt,
     )
 }
